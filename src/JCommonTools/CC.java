@@ -12,6 +12,7 @@ public class CC {
 	/**
 	 * Path to the common text resource 
 	 */
+	public final static String CT_RESOURCE_TEXT = "JCommonTools.rsc/JCTText";
 	public final static String FN_RESOURCE_TEXT = "JCommonTools.Rsc/jnfObOOktext";
 
 	/**

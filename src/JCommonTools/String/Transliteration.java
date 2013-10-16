@@ -16,23 +16,26 @@ public class Transliteration
 	{
 		String res = CC.STR_EMPTY;
 		
-		char[] src = aSrc.toLowerCase().toCharArray();
-		for (int ii=0; ii < src.length ; ii++)
+		if (aSrc != null)
 		{
-			int jj=0;
-			if (Character.isLetter(src[ii]))
+			char[] src = aSrc.toLowerCase().toCharArray();
+			for (int ii=0; ii < src.length ; ii++)
 			{
-			 	for (; jj < AL_CYR.length; jj++)
-			 		if (src[ii] == AL_CYR[jj])
-			 			break;
-		 	}
-		 	else
-		 		jj = AL_CYR.length;
-		 			
-		 	if (jj < AL_CYR.length)
-		 		res += TRANSLIT_V1[jj];
-		 	else
-		 		res += String.valueOf(src[ii]);
+				int jj=0;
+				if (Character.isLetter(src[ii]))
+				{
+				 	for (; jj < AL_CYR.length; jj++)
+				 		if (src[ii] == AL_CYR[jj])
+				 			break;
+			 	}
+			 	else
+			 		jj = AL_CYR.length;
+			 			
+			 	if (jj < AL_CYR.length)
+			 		res += TRANSLIT_V1[jj];
+			 	else
+			 		res += String.valueOf(src[ii]);
+			}
 		}
 		
 		return res;

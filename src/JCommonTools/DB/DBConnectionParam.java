@@ -4,15 +4,11 @@ import JCommonTools.CC;
 
 public class DBConnectionParam
 {
-	/**
-	 * JDBC 
-	 * for registration: Class.forName("org.postgresql.Driver")
-	 */
-	public String Driver;
-    /**
-     * String for connect to DB server.
-     */
+	
+	public DBDriver Driver;
+	
     public String Host;
+    public int Port;
     /**
      * DB name.
      */
@@ -28,8 +24,9 @@ public class DBConnectionParam
 
     public DBConnectionParam()
     {
-    	Driver = CC.STR_EMPTY;
+    	Driver = new  DBDriver();
     	Host = CC.STR_EMPTY;
+    	Port = 0;
     	DBName = CC.STR_EMPTY;
     	UserName = null;
     	Pwd = null;
@@ -40,8 +37,14 @@ public class DBConnectionParam
     {
     	DBConnectionParam pdb = (DBConnectionParam) super.clone();
 
-    	pdb.Driver = new String(Driver);
+    	pdb.Driver = new DBDriver();
+    		pdb.Driver.Name = Driver.Name;
+    		pdb.Driver.Path = Driver.Path;
+    		pdb.Driver.ClassName = Driver.ClassName;
+    		pdb.Driver.PrefixConnectionURL = Driver.PrefixConnectionURL;
+    	
     	pdb.Host = new String(Host);
+    	pdb.Port = Port;
     	pdb.DBName = new String(DBName);
     	pdb.UserName = new String(UserName);
     	pdb.Pwd = new String(Pwd);
