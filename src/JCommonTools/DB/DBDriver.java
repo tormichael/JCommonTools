@@ -1,5 +1,7 @@
 package JCommonTools.DB;
 
+import java.util.ResourceBundle;
+
 import JCommonTools.CC;
 
 public class DBDriver 
@@ -55,4 +57,17 @@ public class DBDriver
 				&& SuffixConnectionURL.equals(drv.SuffixConnectionURL);
 		return ret;
 	}
+	
+    public String getDescription()
+    {
+    	return String.format(
+    			ResourceBundle.getBundle(CC.CT_RESOURCE_TEXT).getString("Text.Message.DBDriver")
+				, Name
+				, Path
+				, ClassName
+				, PrefixConnectionURL
+				, SuffixConnectionURL
+			);
+    }
+	
 }

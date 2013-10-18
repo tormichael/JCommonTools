@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="WINDOWS-1251" standalone="no"?>
+<jardesc>
+    <jar path="C:/orbita/jCommonTools.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/JCommonTools/JCommonTools.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="false" manifestLocation="/JCommonTools/JCommonTools.mf" manifestVersion="1.0" reuseManifest="false" saveManifest="true" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <file path="/JCommonTools/.classpath"/>
+        <javaElement handleIdentifier="=JCommonTools/src"/>
+        <file path="/JCommonTools/JCommonTools.mf"/>
+        <file path="/JCommonTools/.project"/>
+    </selectedElements>
+</jardesc>

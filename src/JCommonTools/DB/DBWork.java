@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 import JCommonTools.CC;
@@ -167,5 +168,14 @@ public class DBWork
 			node.put("P@$w00d", _pdb.Pwd);
 	}
 	
+    public String getConnectDescription()
+    {
+    	return String.format(
+			ResourceBundle.getBundle(CC.CT_RESOURCE_TEXT).getString("Text.Message.ConnectionURL")
+			,getConnectionURL()
+			,_pdb.UserName
+			,_pdb.Pwd
+		);
+    }
 
 }
