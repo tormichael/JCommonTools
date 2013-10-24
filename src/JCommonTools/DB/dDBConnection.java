@@ -155,7 +155,7 @@ public class dDBConnection extends JDialog
 		JPanel pnlConnectionURL = new JPanel(new BorderLayout());
 		pnlConnectionURL.setBorder(BorderFactory.createTitledBorder(_bnd.getString("dDBConnection.BorderText.Info")));
 		_txtInformation = new JTextArea();
-		pnlConnectionURL.add(_txtInformation, BorderLayout.CENTER);
+		pnlConnectionURL.add(new JScrollPane(_txtInformation), BorderLayout.CENTER);
 		this.add(pnlConnectionURL, BorderLayout.CENTER);
 		
 		JPanel pnlButton = new JPanel();
