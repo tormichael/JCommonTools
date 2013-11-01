@@ -13,7 +13,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -32,6 +31,8 @@ public class ComboTree extends JPanel
 	private boolean _unlockCmd = true;
 	private TreePath _selectedPath = null;
 	
+	private Action	_actSelected;
+	
 	public TreeModel getTreeModel()
 	{
 		return mTree.getModel();
@@ -39,6 +40,15 @@ public class ComboTree extends JPanel
 	public void setTreeModel(TreeModel aTM)
 	{
 		mTree.setModel(aTM);
+	}
+
+	public Action getActionSelected() 
+	{
+		return _actSelected;
+	}
+	public void setActionSelected(Action _actSelected) 
+	{
+		this._actSelected = _actSelected;
 	}
 	
 	public void setSelectedPath(TreePath aPath)
@@ -51,6 +61,8 @@ public class ComboTree extends JPanel
 	
 	public ComboTree()
 	{
+		_actSelected = null;
+		
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEtchedBorder());
 
@@ -88,8 +100,6 @@ public class ComboTree extends JPanel
 				processFocusEvent(e);
 			}
 		});
-
-		
 		
 		mTree.addFocusListener(new FocusListener() {
 			
@@ -125,6 +135,10 @@ public class ComboTree extends JPanel
 		_frm.setVisible(false);
 		_cmd.setText("\u25BC");
 		_cmd.removeMouseListener(msCmdEv);
+		if (_actSelected != null)
+		{
+			_actSelected.actionPerformed(new ActionEvent(mTree.getSelectionPath(), 0, _txt.getText()));
+		}
 	}
 	
 	Action actCmd = new AbstractAction() 
