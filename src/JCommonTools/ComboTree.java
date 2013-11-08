@@ -59,6 +59,15 @@ public class ComboTree extends JPanel
 	}
 	
 	
+	public String getText()
+	{
+		return _txt.getText();
+	}
+	public void setText(String aText)
+	{
+		_txt.setText(aText);
+	}
+	
 	public ComboTree()
 	{
 		_actSelected = null;
@@ -127,6 +136,7 @@ public class ComboTree extends JPanel
 		_cmd.addMouseListener(msCmdEv);
 		if (_selectedPath != null)
 			mTree.setSelectionPath(_selectedPath);
+		mTree.requestFocus();
 		_unlockCmd = false;
 	}
 	
@@ -137,7 +147,14 @@ public class ComboTree extends JPanel
 		_cmd.removeMouseListener(msCmdEv);
 		if (_actSelected != null)
 		{
+			try
+			{
 			_actSelected.actionPerformed(new ActionEvent(mTree.getSelectionPath(), 0, _txt.getText()));
+			}
+			catch (Exception ex)
+			{
+	    		ex.printStackTrace();
+			}
 		}
 	}
 	
@@ -150,19 +167,21 @@ public class ComboTree extends JPanel
 				VisibleFrame();
 			else
 				_unlockCmd = true;
+				
 		}
 	};
 	
 	MouseListener msCmdEv = new MouseAdapter() 
 	{
 		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
+		public void mouseExited(MouseEvent e) 
+		{
 			_unlockCmd = true;
 		}
 		
 		@Override
-		public void mouseEntered(MouseEvent e) {
+		public void mouseEntered(MouseEvent e) 
+		{
 			_unlockCmd = false;
 		}
 	}; 
