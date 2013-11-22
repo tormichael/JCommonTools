@@ -3,15 +3,12 @@ package JCommonTools.Dialog;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.Time;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
@@ -22,9 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import JCommonTools.CC;
-import JCommonTools.GBC;
-import JCommonTools.JBPanel;
+import JCommonTools.*;
 
 /**
  * About dialog
@@ -36,7 +31,8 @@ public class dAbout extends JDialog
 {
 	private ResourceBundle _bnd;
 
-	private JBPanel 	_pnl;
+	private JPanelWI		_pnl;
+	
 	private JLabel		_txtTitle;
 	private JLabel		_txtVersion;
 	private JTextArea	_txtBuild;
@@ -82,7 +78,7 @@ public class dAbout extends JDialog
 		//this.setLocationByPlatform(true);
 		
 		GridBagLayout gbl = new GridBagLayout();
-		_pnl = new JBPanel(gbl);
+		_pnl = new JPanelWI(gbl);
 			_txtTitle = new JLabel();
 			gbl.setConstraints(_txtTitle, new GBC(0,0).setIns(15).setFill(GBC.HORIZONTAL));
 			_pnl.add(_txtTitle);

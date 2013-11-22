@@ -5,7 +5,7 @@ import java.awt.Image;
 import java.awt.LayoutManager;
 
 
-public class JBPanel extends javax.swing.JPanel 
+public class JPanelWI extends javax.swing.JPanel 
 {
 	private Image 		_img;
 	
@@ -14,11 +14,11 @@ public class JBPanel extends javax.swing.JPanel
 		this._img = _img;
 	}
 	
-	public JBPanel()
+	public JPanelWI()
 	{
 		_img = null;
 	}
-	public JBPanel(LayoutManager lm)
+	public JPanelWI(LayoutManager lm)
 	{
 		super(lm);
 		_img = null;
