@@ -2,7 +2,16 @@ package JCommonTools;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dialog.ModalityType;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.ContainerAdapter;
+import java.awt.event.ContainerEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
@@ -13,6 +22,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -29,10 +39,11 @@ public class ComboTree extends JPanel
 	protected JTree mTree;
 	
 	private boolean _unlockCmd = true;
+	
 	private TreePath _selectedPath = null;
 	
 	private Action	_actSelected;
-	
+
 	public TreeModel getTreeModel()
 	{
 		return mTree.getModel();
@@ -86,6 +97,7 @@ public class ComboTree extends JPanel
 		add(_cmd, BorderLayout.EAST);
 	
 		_frm = new JFrame();
+		//_frm = new JDialog();
 		_frm.setAlwaysOnTop(true);
 		_frm.setUndecorated(true);
 		mTree = new JTree();
@@ -125,6 +137,7 @@ public class ComboTree extends JPanel
 			}
 		});
 		mTree.addMouseListener(msTreeEv);
+		
 	}
 
 	private void VisibleFrame()
