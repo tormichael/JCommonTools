@@ -38,7 +38,7 @@ public class RefBook
 	 */
 	private void _init()
 	{
-		mRBNodes = new rbNode(1, "RefBook", "rb");
+		mRBNodes = new rbNode(1, null, "RefBook", "rb");
 	}
 	
 	public static RefBook Load(String aFN)
@@ -53,6 +53,8 @@ public class RefBook
 	    		Unmarshaller um = context.createUnmarshaller();
 	    		Object obj = um.unmarshal(new File(aFN));
 	    		ret = (RefBook) obj;
+	    		
+	    		setOwner(ret.getRefBookNodes(), null);
 	    	}
 	    	catch (JAXBException ex)
 	    	{
@@ -70,6 +72,8 @@ public class RefBook
 		{
 	    	try
 	    	{
+	    		setOwnerNull(this.mRBNodes);
+	    		
 	    		JAXBContext context = JAXBContext.newInstance(RefBook.class);
 	    		Marshaller m = context.createMarshaller();
 	    		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -81,5 +85,23 @@ public class RefBook
 	    	}
 		}
 		return ret;
+	}
+	
+	public static void setOwner(rbNode aNodes, rbNode aOwner)
+	{
+		aNodes.setParent(aOwner);
+		
+		for (rbNode rbn : aNodes.getNodes())
+			setOwner(rbn, aNodes);
+		
+	}
+	
+	public static void setOwnerNull(rbNode aNodes)
+	{
+		aNodes.setParent(null);
+		
+		for (rbNode rbn : aNodes.getNodes())
+			setOwnerNull(rbn);
+		
 	}
 }

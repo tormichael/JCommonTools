@@ -1,6 +1,7 @@
 package JCommonTools.RefBook;
 
 import java.awt.BorderLayout;
+import java.awt.Dialog;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -14,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTree;
@@ -31,7 +33,9 @@ import JCommonTools.DB.dDBDriver;
 
 public class dRefBookNode extends JDialog 
 {
-	private rbNode _node; 
+	private rbNode _node;
+	private rbNode _owner;
+	private boolean _isNew;
 	
 	private ResourceBundle _bnd;
 	private String _prefPath;
@@ -57,10 +61,25 @@ public class dRefBookNode extends JDialog
 		return _isResultOk;
 	}
 	
+	public rbNode getNNOwner() 
+	{
+		return _owner;
+	}
+	public void setNNowner(rbNode aOwner)
+	{
+		_owner = aOwner;
+		_cbtParent.setSelectedItem(aOwner);
+	}
+	
 	public dRefBookNode(rbNode aNode, TreeModel aTreeModel)
 	{
 		_node = aNode;
 		_isResultOk = false;
+		
+		if (_node == null)
+			_node = new rbNode();
+		
+		_isNew = _node.IsNew();
 		
 		_bnd = ResourceBundle.getBundle(CC.CT_RESOURCE_TEXT);
 		this.setTitle(_bnd.getString("RefBook.Text.dRefBook"));
@@ -121,8 +140,8 @@ public class dRefBookNode extends JDialog
 
 		JTree tree = new JTree(aTreeModel);
 		_cbtParent.setRenderer(new TreeListCellRenderer(aTreeModel, tree.getCellRenderer()));
+		_cbtParent.setSelectedItem(_node.getParent());
 		
-		//_cbtParent.setSelectedItem(anObject);
 		_txfName.setText(_node.getName());
 		_txfAlias.setText(_node.getAlias());
 		_txfID.setText(CC.STR_EMPTY + _node.getId());
@@ -189,11 +208,32 @@ public class dRefBookNode extends JDialog
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			_node.setName(_txfName.getText());
-			_node.setAlias(_txfAlias.getText());
-			_node.setId(Integer.parseInt(_txfID.getText()));
-			_isResultOk = true;
-			dRefBookNode.this.setVisible(false);
+			
+			_owner = (rbNode)_cbtParent.getSelectedItem();
+			
+			if (_owner != null)
+			{
+				_node.setName(_txfName.getText());
+				_node.setAlias(_txfAlias.getText());
+				_node.setId(Integer.parseInt(_txfID.getText()));
+				//_node.setOwner(owner);
+			
+				/*if (_isNew)
+				{
+					owner.getNodes().add(_node);
+				}
+				else if (!_owner.equals(owner))
+				{
+					_owner.getNodes().remove(_node);
+					owner.getNodes().add(_node);
+				}*/
+				_isResultOk = true;
+				dRefBookNode.this.setVisible(false);
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(dRefBookNode.this, _bnd.getString("RefBook.Message.OwnerUndefined")); 
+			}
 		}
 	};
 

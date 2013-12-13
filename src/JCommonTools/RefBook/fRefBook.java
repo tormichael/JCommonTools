@@ -35,7 +35,8 @@ public class fRefBook extends JFrame
 	private RefBook _rb;
 
 	private JTree _tree;
-	private TreeModel _trm;
+	private DefaultTreeModel _trm;
+	//private TreeModel _trm;
 	private JLabel _sbiMain;
 
 	private String _currFN;
@@ -58,6 +59,9 @@ public class fRefBook extends JFrame
 	public void setRefBook(RefBook _rb) 
 	{
 		this._rb = _rb;
+		_trm = new DefaultTreeModel(this._rb.mRBNodes);
+		//_trm = new trmRefBook(this._rb);
+		_tree.setModel(_trm);
 	}
 	
 	public fRefBook(RefBook aRB)
@@ -77,10 +81,12 @@ public class fRefBook extends JFrame
 		bar.add(ActNew);
 		bar.add(ActEdit);
 		bar.add(ActDelete);
+		bar.addSeparator();
+		bar.add(ActRefresh);
 
 		
-		_trm = new trmRefBook(_rb);
-		_tree = new JTree(_trm);
+		_tree = new JTree();
+		setRefBook(aRB);
 		add(new JScrollPane(_tree), BorderLayout.CENTER);
 		
 		
@@ -142,6 +148,9 @@ public class fRefBook extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			_setCurrentProjectFileName();
+			if (_currFN != null && _currFN.length() > 0)
+				setRefBook(RefBook.Load(_currFN));
 			
 		}
 	};
@@ -155,7 +164,15 @@ public class fRefBook extends JFrame
 			
 			if (_currFN != null && _currFN.length() > 0)
 			{
-				_rb.Save(_currFN);
+				String ret = _rb.Save(_currFN);
+				if (ret != null)
+				{
+					_sbiMain.setText(String.format(_bnd.getString("Text.Error"), ret));
+				}
+				else
+				{
+					_sbiMain.setText(_bnd.getString("Text.Message.SaveSuccessfully"));
+				}
 			}
 		}
 	};
@@ -164,10 +181,29 @@ public class fRefBook extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			dRefBookNode dlg = new dRefBookNode(new rbNode(), _trm);
+			rbNode node = new rbNode();
+			dRefBookNode dlg = new dRefBookNode(node, _trm);
+			TreePath tp = _tree.getSelectionPath();
+			rbNode currNode = null;
+			if (tp != null)
+			{
+				dlg.setNNowner((rbNode)tp.getParentPath().getLastPathComponent());
+				currNode = (rbNode)tp.getLastPathComponent();
+			}
 			dlg.setPreferencePath(_prefPath + "/dEdit");
 			dlg.setVisible(true);
-			
+			if (dlg.isResultOk())
+			{
+				rbNode owner =  dlg.getNNOwner();
+				_trm.insertNodeInto(
+						node, 
+						owner, 
+						currNode == null ? 
+								owner.getNodes().size() : 
+								((rbNode)currNode.getParent()).getNodes().indexOf(currNode)+1
+				);
+				_tree.setSelectionPath(new TreePath(_trm.getPathToRoot(node)));
+			}
 		}
 	};
 	public Action ActEdit = new AbstractAction() 
@@ -178,9 +214,21 @@ public class fRefBook extends JFrame
 			TreePath tp = _tree.getSelectionPath();
 			if (tp != null)
 			{
-				dRefBookNode dlg = new dRefBookNode((rbNode)tp.getLastPathComponent(), _trm);
+				//rbNode owner = (rbNode)tp.getParentPath().getLastPathComponent();
+				rbNode node = (rbNode)tp.getLastPathComponent();
+				dRefBookNode dlg = new dRefBookNode(node, _trm);
 				dlg.setPreferencePath(_prefPath + "/dEdit");
 				dlg.setVisible(true);
+				if (dlg.isResultOk())
+				{
+					rbNode owner =  dlg.getNNOwner();
+					if (!node.getParent().equals(owner))
+					{
+						_trm.removeNodeFromParent(node);
+						_trm.insertNodeInto(node, owner, owner.getNodes().size());
+					}
+					_trm.nodeChanged(node);
+				}
 			}
 		}
 	};
@@ -189,10 +237,50 @@ public class fRefBook extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			
+			TreePath tp = _tree.getSelectionPath();
+			if (tp != null)
+			{
+				rbNode node = (rbNode)tp.getLastPathComponent();
+				if (node.getNodes().size() == 0)
+				{
+					// 
+					// INSERT QUESTION !!!!
+					//
+					rbNode owner = (rbNode)node.getParent(); 
+					int ind = owner.getNodes().indexOf(node);
+					String deletedNodeName = node.toString();
+					_trm.removeNodeFromParent(node);
+					if (owner.getNodes().size() > ind)
+						node = owner.getNodes().get(ind);
+					else
+						node = owner;
+					_tree.setSelectionPath(new TreePath(_trm.getPathToRoot(node)));
+					_sbiMain.setText(String.format(_bnd.getString("Text.Message.DeletedItem"), deletedNodeName));
+					
+				}
+				else
+				{
+					_sbiMain.setText(_bnd.getString("Text.Message.MayDeleteLeafOnly"));
+				}
+			}
 		}
 	};
 
+	public Action ActRefresh = new AbstractAction() 
+	{
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			TreePath tp = _tree.getSelectionPath();
+			if (tp != null)
+			{
+				rbNode node = (rbNode)tp.getParentPath().getLastPathComponent();
+				_trm.nodeStructureChanged(node);
+				_trm.nodeChanged(node);
+			}
+		}
+	};
+	
 	private void _setCurrentProjectFileName()
 	{
 		JFileChooser fDlg = new JFileChooser();
