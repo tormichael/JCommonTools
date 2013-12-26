@@ -15,6 +15,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
@@ -243,19 +244,23 @@ public class fRefBook extends JFrame
 				rbNode node = (rbNode)tp.getLastPathComponent();
 				if (node.getNodes().size() == 0)
 				{
-					// 
-					// INSERT QUESTION !!!!
-					//
-					rbNode owner = (rbNode)node.getParent(); 
-					int ind = owner.getNodes().indexOf(node);
 					String deletedNodeName = node.toString();
-					_trm.removeNodeFromParent(node);
-					if (owner.getNodes().size() > ind)
-						node = owner.getNodes().get(ind);
-					else
-						node = owner;
-					_tree.setSelectionPath(new TreePath(_trm.getPathToRoot(node)));
-					_sbiMain.setText(String.format(_bnd.getString("Text.Message.DeletedItem"), deletedNodeName));
+					if (JOptionPane.showConfirmDialog(
+							fRefBook.this, 
+							String.format(_bnd.getString("Text.Confirm.Delete.RefBook"), deletedNodeName),
+							_bnd.getString("Text.dDeleteRefBook"),
+							JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+					{
+						rbNode owner = (rbNode)node.getParent(); 
+						int ind = owner.getNodes().indexOf(node);
+						_trm.removeNodeFromParent(node);
+						if (owner.getNodes().size() > ind)
+							node = owner.getNodes().get(ind);
+						else
+							node = owner;
+						_tree.setSelectionPath(new TreePath(_trm.getPathToRoot(node)));
+						_sbiMain.setText(String.format(_bnd.getString("Text.Message.DeletedItem"), deletedNodeName));
+					}
 					
 				}
 				else
