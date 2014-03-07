@@ -8,6 +8,8 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import JCommonTools.CC;
@@ -18,6 +20,9 @@ public class DBWork
 	private DBConnectionParam _pdb;
 	private boolean _isDriverInitialized; 
 
+	private ResourceBundle 	_bnd;
+	private Logger 			_logger;
+	
 	/**
 	 * Generate URL connection string from sources as:
 	 * 		[Driver.PrefixConnectionURL]://[Host]:[Port][Driver.SuffixConnectionURL][DBName]
@@ -32,20 +37,24 @@ public class DBWork
 	 *
 	 * @return string - URL connection
 	 */
-	public String getConnectionURL()
+	public static String getConnectionURL(DBConnectionParam pdb)
 	{
 		//if (_pdb.Host.length() > 0 &&  _pdb.Host.endsWith("/"))
 		//{
 		//	_pdb.Host = _pdb.Host.substring(0, _pdb.Host.length()-1);
 		//}
 		
-		String ret = _pdb.Driver.PrefixConnectionURL + "://"  + _pdb.Host; 
+		String ret = pdb.Driver.PrefixConnectionURL + "://"  + pdb.Host; 
 		
-		if (_pdb.Port > 0)
-			ret += ":"+_pdb.Port;
+		if (pdb.Port > 0)
+			ret += ":"+pdb.Port;
 		
-		return  ret  + _pdb.Driver.SuffixConnectionURL + _pdb.DBName; 
+		return  ret  + pdb.Driver.SuffixConnectionURL + pdb.DBName; 
 
+	}
+	public String getConnectionURL()
+	{
+		return getConnectionURL(_pdb);
 	}
 	
 	public boolean IsDBConnectionParamDefined()
@@ -81,6 +90,8 @@ public class DBWork
 				_cn = DriverManager.getConnection(url, _pdb.UserName, _pdb.Pwd);
 			else
 				_cn = DriverManager.getConnection(url);
+			
+			_logger.log(Level.INFO, _bnd.getString("Logger.Info.DBConnection.Open"));
 		}
 		return _cn;
 	}
@@ -109,24 +120,38 @@ public class DBWork
 		_isDriverInitialized = true;
 	}
 
+	public Logger getLogger() 
+	{
+		return _logger;
+	}
+
 	public DBWork ()
 	{
-		_isDriverInitialized = false;
+		_init();
 		_pdb =new DBConnectionParam(); 
 	}
 	
 	public DBWork (DBConnectionParam aPDB)
 	{
-		_isDriverInitialized = false;
+		_init();
 		setDBConnParam(aPDB);
 	}
-	
+
+	private void _init()
+	{
+		_isDriverInitialized = false;
+		_logger = Logger.getLogger("tor.java.commontools.db");
+		_bnd = ResourceBundle.getBundle(CC.CT_RESOURCE_TEXT);
+	}
 
 	public void CloseConnection()
 		throws SQLException
 	{
 		if (_cn != null && !_cn.isClosed())
+		{
 			_cn.close();
+			_logger.log(Level.INFO, _bnd.getString("Logger.Info.DBConnection.Close"));
+		}
 	}
 	
 	public void LoadDBConnectioParam2Reg(String aRegPath)
@@ -170,12 +195,17 @@ public class DBWork
 	
     public String getConnectDescription()
     {
-    	return String.format(
-			ResourceBundle.getBundle(CC.CT_RESOURCE_TEXT).getString("Text.Message.ConnectionURL")
-			,getConnectionURL()
-			,_pdb.UserName
-			,_pdb.Pwd
-		);
+    	return getConnectDescription(_pdb);
     }
 
+    public static String getConnectDescription(DBConnectionParam pdb)
+    {
+    	return String.format(
+			ResourceBundle.getBundle(CC.CT_RESOURCE_TEXT).getString("Text.Message.ConnectionURL")
+			,getConnectionURL(pdb)
+			,pdb.UserName
+			,pdb.Pwd
+		);
+    }
+    
 }
