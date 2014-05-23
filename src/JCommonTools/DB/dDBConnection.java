@@ -259,7 +259,7 @@ public class dDBConnection extends JDialog
 				}
 				catch (Exception ex)
 				{
-					_txtInformation.setText(ex.getMessage());
+					_txtInformation.setText(ex.toString());
 				}
 				finally
 				{
@@ -298,7 +298,8 @@ public class dDBConnection extends JDialog
 			pdb.Driver = _cboDriver.getItemAt(si);
 
 			pdb.Host = _txtHost.getText();
-			pdb.Port = Integer.parseInt(_txtPort.getText());
+			if (_txtPort.getText().length()>0)
+				pdb.Port = Integer.parseInt(_txtPort.getText());
 			pdb.DBName = _txtDBName.getText();
 
 			pdb.UserName = _txtUserName.getText();

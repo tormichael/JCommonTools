@@ -25,13 +25,13 @@ public class DBWork
 	
 	/**
 	 * Generate URL connection string from sources as:
-	 * 		[Driver.PrefixConnectionURL]://[Host]:[Port][Driver.SuffixConnectionURL][DBName]
+	 * 		[Driver.PrefixConnectionURL][Host]:[Port][Driver.SuffixConnectionURL][DBName]
 	 * For example:
 	 * 		Driver.PrefixConnectionURL 	= jdbc:postgresql
-	 * 		Host											= csql-st
-	 * 		Port											= 5432
+	 * 		Host						= ://csql-st
+	 * 		Port						= 5432
 	 * 		Driver.SuffixConnectionURL 	= /
-	 * 		DBName									= pdc
+	 * 		DBName						= pdc
 	 * then generate URL connection string:
 	 * 		jdbc:postgresql://csql-st:5432/pdc
 	 *
@@ -44,7 +44,8 @@ public class DBWork
 		//	_pdb.Host = _pdb.Host.substring(0, _pdb.Host.length()-1);
 		//}
 		
-		String ret = pdb.Driver.PrefixConnectionURL + "://"  + pdb.Host; 
+		//String ret = pdb.Driver.PrefixConnectionURL + "://"  + pdb.Host; 
+		String ret = pdb.Driver.PrefixConnectionURL + ""  + pdb.Host; 
 		
 		if (pdb.Port > 0)
 			ret += ":"+pdb.Port;
@@ -70,8 +71,8 @@ public class DBWork
 		if (_pdb.Driver.Path.length() * _pdb.Driver.ClassName.length() * _pdb.Driver.PrefixConnectionURL.length() == 0)
 			return ret;
 		
-		if (_pdb.DBName.length() * _pdb.Host.length() == 0)
-			return ret;
+		//if (_pdb.DBName.length() * _pdb.Host.length() == 0)
+		//	return ret;
 		
 		return true;
 	}
@@ -109,15 +110,21 @@ public class DBWork
 	public void initDBDriver() 
 			throws ClassNotFoundException, MalformedURLException, SQLException, IllegalAccessException, InstantiationException
 	{
-		URLClassLoader classLoader = new URLClassLoader(
-				new URL[]{new  URL("File:///"+_pdb.Driver.Path)}, this.getClass().getClassLoader()
-		);
-		Driver driver = (Driver) Class.forName(_pdb.Driver.ClassName, true, classLoader).newInstance();
 		
-		DriverManager.registerDriver(new DelegatingDriver(driver)); // register using the Delegating Driver
-		//DriverManager.getDriver("jdbc:postgresql://host/db"); // checks that the driver is found
-		
-		_isDriverInitialized = true;
+		String[] ss = _pdb.Driver.Path.split(";", -1);
+		if (ss.length > 0)
+		{
+			URL[] arURL = new URL[ss.length];
+			for (int ii = 0; ii < ss.length; ii++)
+				arURL[ii] = new  URL("File:///"+ss[ii].trim());
+			URLClassLoader classLoader = new URLClassLoader(arURL, this.getClass().getClassLoader());
+			Driver driver = (Driver) Class.forName(_pdb.Driver.ClassName, true, classLoader).newInstance();
+			
+			DriverManager.registerDriver(new DelegatingDriver(driver)); // register using the Delegating Driver
+			//DriverManager.getDriver("jdbc:postgresql://host/db"); // checks that the driver is found
+			
+			_isDriverInitialized = true;
+		}
 	}
 
 	public Logger getLogger() 

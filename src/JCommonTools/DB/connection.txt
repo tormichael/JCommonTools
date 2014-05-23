@@ -1,0 +1,93 @@
+
+ Generate URL connection string from sources as:
+	[Driver.PrefixConnectionURL][Host]:[Port][Driver.SuffixConnectionURL][DBName]
+ For example:
+ 		Driver.PrefixConnectionURL 	= jdbc:postgresql
+ 		Host						= ://csql-st
+ 		Port						= 5432
+ 		Driver.SuffixConnectionURL 	= /
+ 		DBName						= pdc
+ then generate URL connection string:
+ 		jdbc:postgresql://csql-st:5432/pdc
+
+-------------------------------------------------------------------------
+[Driver.Name]=PostgreSQL
+[Driver.Path]=T:\Java\exLib\postgre-sql-jdbc\postgresql-9.1-902.jdbc3.jar
+[Driver.ClassName]=org.postgresql.Driver
+[Driver.PrefixConnectionURL]=jdbc:postgresql
+[Driver.SuffixConnectionURL]=/
+
+[Host]=://csql-st
+[Port]=5432
+[DBName]=pdc
+
+[UserName]=postgres
+[Pwd]=p0stgr#SQL!
+
+----------------------------------------------------------
+[Driver.Name]=Microsoft SQL Server 2005
+[Driver.Path]=T:\Java\exLib\ms-sql-jdbc\sqljdbc_2.0\enu\sqljdbc4.jar
+[Driver.ClassName]=com.microsoft.sqlserver.jdbc.SQLServerDriver
+[Driver.PrefixConnectionURL]=jdbc:sqlserver
+[Driver.SuffixConnectionURL]=
+
+[Host]=://CSQL-ST
+[Port]=1433
+[DBName]=pdc
+
+[UserName]=sa
+[Pwd]=ghjcnjT34!
+
+-------------------------------------------------------------------------
+[Driver.Name]=StelsJDBC DBF
+[Driver.Path]=T:\Java\exLib\StelsJDBC\stels_dbf\dbfdriver\dbfdriver.jar;T:\Java\exLib\StelsJDBC\stels_dbf\dbfdriver\log4j.jar
+[Driver.ClassName]=jstels.jdbc.dbf.DBFDriver2
+[Driver.PrefixConnectionURL]=jdbc:jstels:dbf:
+[Driver.SuffixConnectionURL]=
+
+[Host]=E:\w\dbf
+[Port]=
+[DBName]=
+
+[UserName]=
+[Pwd]=
+-------------------------------------------------------------------------
+[Driver.Name]=StelsJDBC CSV
+[Driver.Path]=
+[Driver.ClassName]=
+[Driver.PrefixConnectionURL]=
+[Driver.SuffixConnectionURL]=
+
+[Host]=
+[Port]=
+[DBName]=
+
+[UserName]=
+[Pwd]=
+-------------------------------------------------------------------------
+[Driver.Name]=
+[Driver.Path]=
+[Driver.ClassName]=
+[Driver.PrefixConnectionURL]=
+[Driver.SuffixConnectionURL]=
+
+[Host]=
+[Port]=
+[DBName]=
+
+[UserName]=
+[Pwd]=
+-------------------------------------------------------------------------
+[Driver.Name]=
+[Driver.Path]=
+[Driver.ClassName]=
+[Driver.PrefixConnectionURL]=
+[Driver.SuffixConnectionURL]=
+
+[Host]=
+[Port]=
+[DBName]=
+
+[UserName]=
+[Pwd]=
+-------------------------------------------------------------------------
