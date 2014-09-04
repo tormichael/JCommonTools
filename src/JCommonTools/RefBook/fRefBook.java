@@ -34,7 +34,7 @@ public class fRefBook extends JFrame
 {
 	private ResourceBundle _bnd;
 	private RefBook _rb;
-
+	private JToolBar _bar;
 	private JTree _tree;
 	private DefaultTreeModel _trm;
 	//private TreeModel _trm;
@@ -52,6 +52,10 @@ public class fRefBook extends JFrame
 		this._prefPath = _prefPath;
 	}
 
+	public JToolBar getCommandBar()
+	{
+		return _bar;
+	}
 	
 	public RefBook getRefBook() 
 	{
@@ -74,16 +78,16 @@ public class fRefBook extends JFrame
 		/**
 		 *   T O O L S   B A R
 		 */
-		JToolBar bar = new JToolBar();
-		add(bar, BorderLayout.NORTH);
-		bar.add(ActLoad);
-		bar.add(ActSave);
-		bar.addSeparator();
-		bar.add(ActNew);
-		bar.add(ActEdit);
-		bar.add(ActDelete);
-		bar.addSeparator();
-		bar.add(ActRefresh);
+		_bar = new JToolBar();
+		add(_bar, BorderLayout.NORTH);
+		_bar.add(ActLoad);
+		_bar.add(ActSave);
+		_bar.addSeparator();
+		_bar.add(ActNew);
+		_bar.add(ActEdit);
+		_bar.add(ActDelete);
+		_bar.addSeparator();
+		_bar.add(ActRefresh);
 
 		
 		_tree = new JTree();
@@ -188,7 +192,10 @@ public class fRefBook extends JFrame
 			rbNode currNode = null;
 			if (tp != null)
 			{
-				dlg.setNNowner((rbNode)tp.getParentPath().getLastPathComponent());
+				if (tp.getParentPath() == null)
+					dlg.setNNowner((rbNode)tp.getLastPathComponent());
+				else
+					dlg.setNNowner((rbNode)tp.getParentPath().getLastPathComponent());
 				currNode = (rbNode)tp.getLastPathComponent();
 			}
 			dlg.setPreferencePath(_prefPath + "/dEdit");

@@ -8,6 +8,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import JCommonTools.CC;
+
 
 @XmlRootElement (name = "RefBook")
 public class RefBook 
@@ -103,5 +105,23 @@ public class RefBook
 		for (rbNode rbn : aNodes.getNodes())
 			setOwnerNull(rbn);
 		
+	}
+
+	public static String getPath(rbNode aNode)
+	{
+		String ret = CC.STR_EMPTY;
+		
+		if (aNode != null)
+		{
+			
+			ret = getPath((rbNode)aNode.getParent());
+			if (ret.length() > 0)
+				ret = ret + "~" + aNode.getId();
+			else
+				ret = aNode.getId()+CC.STR_EMPTY;
+			
+		}
+		
+		return ret;
 	}
 }
