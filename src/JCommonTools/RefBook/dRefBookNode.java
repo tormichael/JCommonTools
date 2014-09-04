@@ -85,7 +85,6 @@ public class dRefBookNode extends JDialog
 		this.setTitle(_bnd.getString("RefBook.Text.dRefBook"));
 		this.setModal(true);
 		//this.setModalityType(ModalityType.TOOLKIT_MODAL);
-		this.setSize(300, 300);
 		
 		GridBagLayout gbl = new GridBagLayout();
 		JPanel pnl =new JPanel(gbl);
@@ -145,29 +144,26 @@ public class dRefBookNode extends JDialog
 		_txfName.setText(_node.getName());
 		_txfAlias.setText(_node.getAlias());
 		_txfID.setText(CC.STR_EMPTY + _node.getId());
-		
+
 		this.addWindowListener(new WindowAdapter() 
 		{
 			@Override
-			public void windowActivated(WindowEvent e) 
+			public void windowOpened(WindowEvent e) 
 			{
 				LoadProgramPreference ();
-				super.windowActivated(e);
+				super.windowOpened(e);
 			}
-			
-			@Override
-			public void windowClosing(WindowEvent e) 
-			{
-				SaveProgramPreference();
-				super.windowClosing(e);
-			}
+
 		});
 	}
 
 	private void LoadProgramPreference()
 	{
 		if (_prefPath == null)
+		{
+			this.setSize(300, 300);
 			return;
+		}
 		
 		Preferences node = Preferences.userRoot().node(_prefPath);
 		AsRegister.LoadWindowLocation(node, this);
@@ -228,6 +224,7 @@ public class dRefBookNode extends JDialog
 					owner.getNodes().add(_node);
 				}*/
 				_isResultOk = true;
+				SaveProgramPreference();
 				dRefBookNode.this.setVisible(false);
 			}
 			else

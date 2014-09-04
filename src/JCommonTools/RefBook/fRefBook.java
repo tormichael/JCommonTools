@@ -32,6 +32,7 @@ import JCommonTools.CC;
 
 public class fRefBook extends JFrame 
 {
+	public final static String REFBOOK_FILE_EXTENSION = "rfb";
 	private ResourceBundle _bnd;
 	private RefBook _rb;
 	private JToolBar _bar;
@@ -52,6 +53,15 @@ public class fRefBook extends JFrame
 		this._prefPath = _prefPath;
 	}
 
+	public String getCurrentFileName()
+	{
+		return _currFN;
+	}
+	public void setCurrentFileName(String aFN)
+	{
+		_currFN = aFN;
+	}
+	
 	public JToolBar getCommandBar()
 	{
 		return _bar;
@@ -67,6 +77,11 @@ public class fRefBook extends JFrame
 		_trm = new DefaultTreeModel(this._rb.mRBNodes);
 		//_trm = new trmRefBook(this._rb);
 		_tree.setModel(_trm);
+	}
+	
+	public void setStatusText(String aText)
+	{
+		_sbiMain.setText(aText);
 	}
 	
 	public fRefBook(RefBook aRB)
@@ -208,7 +223,9 @@ public class fRefBook extends JFrame
 						owner, 
 						currNode == null ? 
 								owner.getNodes().size() : 
-								((rbNode)currNode.getParent()).getNodes().indexOf(currNode)+1
+								currNode.getParent() == null || currNode.equals(owner) ?
+									0	:
+									((rbNode)currNode.getParent()).getNodes().indexOf(currNode)+1
 				);
 				_tree.setSelectionPath(new TreePath(_trm.getPathToRoot(node)));
 			}
@@ -296,7 +313,7 @@ public class fRefBook extends JFrame
 	private void _setCurrentProjectFileName()
 	{
 		JFileChooser fDlg = new JFileChooser();
-		FileNameExtensionFilter fnf = new FileNameExtensionFilter(_bnd.getString("RefBook.Text.FileChooser"), "rfb");
+		FileNameExtensionFilter fnf = new FileNameExtensionFilter(_bnd.getString("RefBook.Text.FileChooser"), REFBOOK_FILE_EXTENSION );
 		fDlg.setFileFilter(fnf);
 		if (_currFN != null && _currFN.length() > 0)
 			fDlg.setCurrentDirectory(new File(_currFN));
@@ -306,6 +323,8 @@ public class fRefBook extends JFrame
 		if (fDlg.showDialog(this, _bnd.getString("RefBook.Text.FileChooser")) == JFileChooser.APPROVE_OPTION)
 		{
 			_currFN = fDlg.getSelectedFile().getPath();
+			if (!_currFN.toLowerCase().endsWith("."+REFBOOK_FILE_EXTENSION))
+				_currFN += "." + REFBOOK_FILE_EXTENSION;
 			//String[] ss = fDlg.getSelectedFile().
 			//fnf.getExtensions();
 		}
