@@ -4,17 +4,13 @@ package JCommonTools.RefBook;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
-import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import JCommonTools.CC;
 
@@ -231,4 +227,26 @@ public class rbNode  implements MutableTreeNode
 		_owner = (rbNode) newParent;
 	}
 
+	public rbNode findByAlias(String aSearchText)
+	{
+		return rbNode.findByAlias(this, aSearchText);
+	}
+
+	public static rbNode findByAlias(rbNode aRBN, String aSearchText)
+	{
+		rbNode ret = null;
+		for (rbNode rbn : aRBN.getNodes())
+		{
+			if (rbn.getAlias().equals(aSearchText))
+				return rbn;
+
+			if (rbn.getNodes().size() > 0)
+			{
+				ret = findByAlias(rbn, aSearchText);
+				if (ret != null)
+					break;
+			}
+		}
+		return ret;	
+	}
 }

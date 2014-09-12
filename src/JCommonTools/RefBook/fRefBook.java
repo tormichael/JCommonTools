@@ -12,6 +12,7 @@ import java.util.prefs.Preferences;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,6 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -122,7 +125,26 @@ public class fRefBook extends JFrame
 		_sbiMain.setBorder(BorderFactory.createLoweredBevelBorder());
 		statusBar.add(_sbiMain);
 		
-		
+		_tree.addTreeSelectionListener(new TreeSelectionListener() 
+		{
+			@Override
+			public void valueChanged(TreeSelectionEvent e) 
+			{
+				try
+				{
+					if (e.getNewLeadSelectionPath() != null
+						&& e.getNewLeadSelectionPath().getLastPathComponent() instanceof rbNode)
+					{
+						rbNode rbn = (rbNode) e.getNewLeadSelectionPath().getLastPathComponent();
+						setStatusText(rbn.getId()+ ") "+rbn.getName()+"["+rbn.getAlias()+"]");
+					}
+				}
+				catch (Exception ex)
+				{
+					setStatusText(ex.getMessage());
+				}
+			}
+		});
 		
 		this.addWindowListener(new WindowAdapter() 
 		{
@@ -187,11 +209,11 @@ public class fRefBook extends JFrame
 				String ret = _rb.Save(_currFN);
 				if (ret != null)
 				{
-					_sbiMain.setText(String.format(_bnd.getString("Text.Error"), ret));
+					setStatusText(String.format(_bnd.getString("Text.Error"), ret));
 				}
 				else
 				{
-					_sbiMain.setText(_bnd.getString("Text.Message.SaveSuccessfully"));
+					setStatusText(_bnd.getString("Text.Message.SaveSuccessfully"));
 				}
 			}
 		}
@@ -247,7 +269,7 @@ public class fRefBook extends JFrame
 				if (dlg.isResultOk())
 				{
 					rbNode owner =  dlg.getNNOwner();
-					if (!node.getParent().equals(owner))
+					if (node.getParent() != null && !node.getParent().equals(owner))
 					{
 						_trm.removeNodeFromParent(node);
 						_trm.insertNodeInto(node, owner, owner.getNodes().size());
@@ -283,13 +305,13 @@ public class fRefBook extends JFrame
 						else
 							node = owner;
 						_tree.setSelectionPath(new TreePath(_trm.getPathToRoot(node)));
-						_sbiMain.setText(String.format(_bnd.getString("Text.Message.DeletedItem"), deletedNodeName));
+						setStatusText(String.format(_bnd.getString("Text.Message.DeletedItem"), deletedNodeName));
 					}
 					
 				}
 				else
 				{
-					_sbiMain.setText(_bnd.getString("Text.Message.MayDeleteLeafOnly"));
+					setStatusText(_bnd.getString("Text.Message.MayDeleteLeafOnly"));
 				}
 			}
 		}
@@ -303,7 +325,11 @@ public class fRefBook extends JFrame
 			TreePath tp = _tree.getSelectionPath();
 			if (tp != null)
 			{
-				rbNode node = (rbNode)tp.getParentPath().getLastPathComponent();
+				rbNode node;
+				if (tp.getParentPath() != null)
+					node = (rbNode)tp.getParentPath().getLastPathComponent();
+				else
+					node = (rbNode)tp.getLastPathComponent();
 				_trm.nodeStructureChanged(node);
 				_trm.nodeChanged(node);
 			}
@@ -334,5 +360,38 @@ public class fRefBook extends JFrame
 		}
 	}
 	
+	public static void LoadComboModel(DefaultComboBoxModel<rbNode> aModCbo, rbNode aRBNode, boolean aIsEmptyItem)
+	{
+		aModCbo.removeAllElements();
+		if (aIsEmptyItem)
+			aModCbo.addElement(new rbNode());
+		for (int ii = 0; ii < aRBNode.getChildCount(); ii++)
+			aModCbo.addElement((rbNode)aRBNode.getChildAt(ii));
+	}
 	
+	public static String FindRBNodeByIDInComModel(DefaultComboBoxModel<rbNode> aModCbo, int aID)
+	{
+		String ret = CC.STR_EMPTY;
+
+		if (aModCbo != null)
+			for (int ii = 0; ii < aModCbo.getSize(); ii++)
+				if (aID == aModCbo.getElementAt(ii).getId())
+					ret = aModCbo.getElementAt(ii).getName();
+
+		return ret;
+	}
+
+	public static int FindRBNodeByNameInComModel(DefaultComboBoxModel<rbNode> aModCbo, String aName)
+	{
+		int ret = 0;
+
+		if (aModCbo != null)
+			for (int ii = 0; ii < aModCbo.getSize(); ii++)
+				if (aName.equals(aModCbo.getElementAt(ii).getName()))
+					ret = aModCbo.getElementAt(ii).getId();
+		
+		return ret;
+	}
+
+
 }

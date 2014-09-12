@@ -26,7 +26,7 @@ public class trmRefBook extends TreeModelSupport
 
 	public void setRoot(RefBook aRB)
 	{
-		rbNode oldRoot = aRB.getRefBookNodes();
+		rbNode oldRoot = aRB.getRefBookNode();
 		_rb = aRB;
 		//fireTreeStructureChanged(oldRoot); 
 	}
@@ -34,7 +34,7 @@ public class trmRefBook extends TreeModelSupport
 	@Override
 	public Object getRoot() 
 	{
-		return _rb.getRefBookNodes();
+		return _rb.getRefBookNode();
 	}
 
 	@Override

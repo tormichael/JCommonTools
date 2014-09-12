@@ -16,11 +16,11 @@ public class RefBook
 {
 	protected rbNode	mRBNodes;
 	
-	public rbNode getRefBookNodes() 
+	public rbNode getRefBookNode() 
 	{
 		return mRBNodes;
 	}
-	public void setRefBookNodes(rbNode aRBNodes) 
+	public void setRefBookNode(rbNode aRBNodes) 
 	{
 		this.mRBNodes = aRBNodes;
 	}
@@ -56,7 +56,7 @@ public class RefBook
 	    		Object obj = um.unmarshal(new File(aFN));
 	    		ret = (RefBook) obj;
 	    		
-	    		setOwner(ret.getRefBookNodes(), null);
+	    		setOwner(ret.getRefBookNode(), null);
 	    	}
 	    	catch (JAXBException ex)
 	    	{
