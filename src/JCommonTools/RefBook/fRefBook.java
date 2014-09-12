@@ -365,6 +365,10 @@ public class fRefBook extends JFrame
 		aModCbo.removeAllElements();
 		if (aIsEmptyItem)
 			aModCbo.addElement(new rbNode());
+		
+		if (aRBNode == null)
+			return;
+		
 		for (int ii = 0; ii < aRBNode.getChildCount(); ii++)
 			aModCbo.addElement((rbNode)aRBNode.getChildAt(ii));
 	}
