@@ -1,8 +1,12 @@
 package JCommonTools.Param;
 
+import java.util.prefs.Preferences;
+
+import javax.xml.bind.annotation.XmlTransient;
+
 public class Param 
 {
-	private String _prefsPath;
+	private String _prefsKey;
 	private String _title;
 	private String _desc;
 	private String _type;
@@ -11,11 +15,11 @@ public class Param
 	private String _swCtrlOpt;
 	private String _swCtrlRestriction;
 	
-	public String getPrefsPath() {
-		return _prefsPath;
+	public String getPrefsKey() {
+		return _prefsKey;
 	}
-	public void setPrefsPath(String _prefsPath) {
-		this._prefsPath = _prefsPath;
+	public void setPrefsKey(String _prefsKey) {
+		this._prefsKey = _prefsKey;
 	}
 
 	public String getTitle() {
@@ -62,7 +66,7 @@ public class Param
 
 	public Param ()
 	{
-		_prefsPath = null;
+		_prefsKey = null;
 		_title = null;
 		_desc = null;
 		_type = null;
@@ -71,4 +75,5 @@ public class Param
 		_swCtrlOpt = null;
 		_swCtrlRestriction = null;
 	}
+	
 }

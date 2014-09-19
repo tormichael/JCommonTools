@@ -23,7 +23,7 @@ public class BookParam
 
 	public BookParam()
 	{
-		_page = new Page();
+		_page = new Page("root", null, 0, null);
 	}
 	
  	public static BookParam Load(String aFileName)
