@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 public class Param 
 {
+	private int _num;
 	private String _prefsKey;
 	private String _title;
 	private String _desc;
@@ -14,6 +15,13 @@ public class Param
 	private String _swCtrlName;
 	private String _swCtrlOpt;
 	private String _swCtrlRestriction;
+	
+	public int getNumber() {
+		return _num;
+	}
+	public void setNumber(int _num) {
+		this._num = _num;
+	}
 	
 	public String getPrefsKey() {
 		return _prefsKey;
@@ -66,6 +74,7 @@ public class Param
 
 	public Param ()
 	{
+		_num=0;
 		_prefsKey = null;
 		_title = null;
 		_desc = null;

@@ -208,6 +208,17 @@ public class fBookParam extends JDialog
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			TreePath tp = _tree.getSelectionPath();
+			if (tp != null)
+			{
+				Page pg = (Page)tp.getLastPathComponent();
+				if (pg != null)
+				{
+					dParams dlg = new dParams(pg.getParameters());
+					dlg.setPreferencePath(_prefPath + "/BookParam/dParams");
+					dlg.setVisible(true);
+				}
+			}
 		}
 	};
 	
