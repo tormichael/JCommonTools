@@ -1,6 +1,7 @@
 package JCommonTools.Param;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -18,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -36,6 +38,8 @@ import org.w3c.dom.views.AbstractView;
 
 import JCommonTools.AsRegister;
 import JCommonTools.CC;
+import JCommonTools.Convert;
+import JCommonTools.TableTools;
 import JCommonTools.RefBook.fRefBook;
 
 public class dParams extends JDialog 
@@ -45,6 +49,7 @@ public class dParams extends JDialog
 	private JTextArea _desc;
 	private JSplitPane _spp;
 
+	private ResourceBundle _bnd;
 	private boolean _isResultOk;
 	private String _prefPath;
 
@@ -67,10 +72,17 @@ public class dParams extends JDialog
 		_prefPath = null;
 		_isResultOk = false;
 		_params = aParams;
+		_bnd = ResourceBundle.getBundle(CC.CT_RESOURCE_TEXT);
 		
 		this.setModal(true);
 	
 		_tab = new JTable(new tmParams(aParams));
+		_tab.setRowHeight(_tab.getFont().getSize() + 3);
+		_tab.getTableHeader().setPreferredSize(new Dimension(
+				_tab.getTableHeader().getPreferredSize().width, 
+				_tab.getTableHeader().getPreferredSize().height*2
+		));
+		//_tab.setRowHeight(-1, _tab.getFont().getSize()*2 + 6);
 		_desc = new JTextArea();
 		_spp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
 				new JScrollPane(_tab), 
@@ -81,10 +93,17 @@ public class dParams extends JDialog
 		JPanel pnlButton = new JPanel();
 		pnlButton.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		JButton btnOk = new JButton(actOk);
+		btnOk.setText(_bnd.getString("Button.Ok"));
 		pnlButton.add(btnOk);
+		JPanel pnlSep = new JPanel();
+		pnlSep.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 30));
+		pnlButton.add(pnlSep);
 		JButton btnCancel = new JButton(actCancel);
+		btnCancel.setText(_bnd.getString("Button.Cancel"));
 		pnlButton.add(btnCancel);
-		this.add(pnlButton, BorderLayout.SOUTH);
+		JPanel pnlButton2 = new JPanel(new BorderLayout());
+		pnlButton2.add(pnlButton, BorderLayout.EAST);
+		this.add(pnlButton2, BorderLayout.SOUTH);
 	
 		JComboBox<String> cboType = new JComboBox<String>();	
 		cboType.addItem("String");
@@ -106,7 +125,7 @@ public class dParams extends JDialog
 		cboSwCtrlName.addItem("JSlider");
 		cboSwCtrlName.addItem("JFileChooser");
 		cboSwCtrlName.addItem("JColorChooser");
-		_tab.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(cboType));
+		_tab.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(cboSwCtrlName));
 	
 		this.addWindowListener(new WindowAdapter() 
 		{
@@ -132,6 +151,7 @@ public class dParams extends JDialog
 		AsRegister.LoadWindowLocation(node, this);
 		AsRegister.LoadWindowSize(node, this);
 		_spp.setDividerLocation(node.getInt("SplitPane", 200));
+		TableTools.SetColumnsWidthFromString(_tab, node.get("TabColWidth_Connection", CC.STR_EMPTY));
 	}
 	
 	private void SaveProgramPreference()
@@ -143,6 +163,7 @@ public class dParams extends JDialog
 		AsRegister.SaveWindowLocation(node, this);
 		AsRegister.SaveWindowSize(node, this);
 		node.putInt("SplitPane", _spp.getDividerLocation());
+		node.put("TabColWidth_Connection", TableTools.GetColumnsWidthAsString(_tab));
 	}
 
 	Action actOk = new AbstractAction() 
@@ -300,7 +321,7 @@ public class dParams extends JDialog
 					_params.get(rowIndex).setSwingCtrlOptional(aValue.toString());
 					break;
 				case 6:
-					_params.get(rowIndex).setSwingCtrlName(aValue.toString());
+					_params.get(rowIndex).setSwingCtrlRestriction(aValue.toString());
 					break;
 			}
 		}

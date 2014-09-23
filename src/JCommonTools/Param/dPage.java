@@ -119,7 +119,7 @@ public class dPage extends JDialog
 		JButton _btnOk = new JButton(actOk);
 		_btnOk.setText(_bnd.getString("Button.Ok"));
 		pnlButton.add(_btnOk);
-		JButton _btnCancel = new JButton(actCancel);
+		JButton _btnCancel = new JButton(actCancel);		
 		_btnCancel.setText(_bnd.getString("Button.Cancel"));
 		pnlButton.add(_btnCancel);
 		this.add(pnlButton, BorderLayout.SOUTH);

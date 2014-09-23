@@ -22,12 +22,15 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.border.Border;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import JCommonTools.AsRegister;
 import JCommonTools.CC;
+import JCommonTools.RefBook.rbNode;
 
 public class fBookParam extends JDialog
 {
@@ -75,7 +78,7 @@ public class fBookParam extends JDialog
 		_tree = new JTree();
 		setBookParam(aBP);
 		_tree.setRootVisible(false);
-		_params = new pnlParams();
+		_params = new pnlParams(null);
 		
 		_pnlBP = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(_tree), _params);
 		add(_pnlBP, BorderLayout.CENTER);
@@ -98,7 +101,32 @@ public class fBookParam extends JDialog
 		add(pnlButton, BorderLayout.SOUTH);
 		pnlButton.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		pnlBtnIn.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 30));
+
+		_tree.addTreeSelectionListener(new TreeSelectionListener() 
+		{
+			@Override
+			public void valueChanged(TreeSelectionEvent e) 
+			{
+				try
+				{
+					if (e.getNewLeadSelectionPath() != null
+						&& e.getNewLeadSelectionPath().getLastPathComponent() instanceof Page)
+					{
+						Page pg = (Page) e.getNewLeadSelectionPath().getLastPathComponent();
+						//setStatusText(rbn.getId()+ ") "+rbn.getName()+"["+rbn.getAlias()+"]");
+						_pnlBP.remove(_params);
+						_params = new pnlParamsDefault(pg.getParameters());
+						_pnlBP.setRightComponent(_params);
+					}
+				}
+				catch (Exception ex)
+				{
+					//setStatusText(ex.getMessage());
+				}
+			}
+		});
 		
+	
 		this.addWindowListener(new WindowAdapter() 
 		{
 			@Override
