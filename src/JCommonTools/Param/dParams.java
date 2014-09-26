@@ -14,33 +14,18 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
-
-import org.w3c.dom.views.AbstractView;
 
 import JCommonTools.AsRegister;
 import JCommonTools.CC;
-import JCommonTools.Convert;
 import JCommonTools.TableTools;
-import JCommonTools.RefBook.fRefBook;
 
 public class dParams extends JDialog 
 {
@@ -113,18 +98,19 @@ public class dParams extends JDialog
 		_tab.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(cboType));
 		
 		JComboBox<String> cboSwCtrlName = new JComboBox<String>();
-		cboSwCtrlName.addItem("JTextField");
-		cboSwCtrlName.addItem("JTextArea");
-		cboSwCtrlName.addItem("JFormattedTextField");
-		cboSwCtrlName.addItem("JPasswordField");
-		cboSwCtrlName.addItem("JSpinner");
-		cboSwCtrlName.addItem("JComboBox<E>");
-		cboSwCtrlName.addItem("JCheckBox");
-		cboSwCtrlName.addItem("JToggleButton");
-		cboSwCtrlName.addItem("JRadioButton");
-		cboSwCtrlName.addItem("JSlider");
-		cboSwCtrlName.addItem("JFileChooser");
-		cboSwCtrlName.addItem("JColorChooser");
+		cboSwCtrlName.addItem("javax.swing.JTextField");
+		cboSwCtrlName.addItem("javax.swing.JTextArea");
+		cboSwCtrlName.addItem("javax.swing.JFormattedTextField");
+		cboSwCtrlName.addItem("javax.swing.JPasswordField");
+		cboSwCtrlName.addItem("javax.swing.JSpinner");
+		cboSwCtrlName.addItem("javax.swing.JComboBox<T>");
+		cboSwCtrlName.addItem("javax.swing.JCheckBox");
+		cboSwCtrlName.addItem("javax.swing.JToggleButton");
+		cboSwCtrlName.addItem("javax.swing.JRadioButton");
+		cboSwCtrlName.addItem("javax.swing.JSlider");
+		cboSwCtrlName.addItem("javax.swing.JFileChooser");
+		cboSwCtrlName.addItem("javax.swing.JColorChooser");
+		cboSwCtrlName.addItem("JFontChooser");
 		_tab.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(cboSwCtrlName));
 	
 		this.addWindowListener(new WindowAdapter() 

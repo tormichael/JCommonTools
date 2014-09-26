@@ -114,9 +114,11 @@ public class fBookParam extends JDialog
 					{
 						Page pg = (Page) e.getNewLeadSelectionPath().getLastPathComponent();
 						//setStatusText(rbn.getId()+ ") "+rbn.getName()+"["+rbn.getAlias()+"]");
+						int idl = _pnlBP.getDividerLocation();
 						_pnlBP.remove(_params);
 						_params = new pnlParamsDefault(pg.getParameters());
 						_pnlBP.setRightComponent(_params);
+						_pnlBP.setDividerLocation(idl);
 					}
 				}
 				catch (Exception ex)
