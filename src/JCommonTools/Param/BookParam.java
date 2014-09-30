@@ -8,6 +8,9 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import JCommonTools.CC;
+import JCommonTools.RefBook.rbNode;
+
 @XmlRootElement (name = "BookParam")
 public class BookParam 
 {
@@ -38,6 +41,8 @@ public class BookParam
 	    		Unmarshaller um = context.createUnmarshaller();
 	    		Object obj = um.unmarshal(new File(aFileName));
 	    		ret = (BookParam) obj;
+	    		
+	    		setOwner(ret.getBookPage(), null);
 	    	}
 	    	catch (JAXBException ex)
 	    	{
@@ -57,6 +62,8 @@ public class BookParam
 		{
 	    	try
 	    	{
+	    		setOwnerNull(this._page);
+	    		
 	    		JAXBContext context = JAXBContext.newInstance(BookParam.class);
 	    		Marshaller m = context.createMarshaller();
 	    		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -70,5 +77,41 @@ public class BookParam
     	
     	return ret;
 	}
+
+	public static void setOwner(Page aNodes, Page aOwner)
+	{
+		aNodes.setParent(aOwner);
+		
+		for (Page rbn : aNodes.getPages())
+			setOwner(rbn, aNodes);
+		
+	}
 	
+	public static void setOwnerNull(Page aNodes)
+	{
+		aNodes.setParent(null);
+		
+		for (Page rbn : aNodes.getPages())
+			setOwnerNull(rbn);
+		
+	}
+	
+	public static String getPathPrefs(Page aNode, String aDelim)
+	{
+		String ret = CC.STR_EMPTY;
+		
+		if (aNode != null)
+		{
+			
+			ret = getPathPrefs((Page)aNode.getParent(), aDelim);
+			if (ret.length() > 0)
+				ret = ret + aDelim + aNode.getPrefsNode();
+			else
+				ret = aNode.getPrefsNode()+CC.STR_EMPTY;
+			
+		}
+		
+		return ret;
+	}
+
 }

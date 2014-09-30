@@ -190,7 +190,7 @@ public class fRefBook extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			_setCurrentProjectFileName();
+			_setCurrentRBFileName();
 			if (_currFN != null && _currFN.length() > 0)
 				setRefBook(RefBook.Load(_currFN));
 			
@@ -202,7 +202,7 @@ public class fRefBook extends JFrame
 		public void actionPerformed(ActionEvent e) 
 		{
 			if (_currFN == null || _currFN.length() == 0)
-				_setCurrentProjectFileName();
+				_setCurrentRBFileName();
 			
 			if (_currFN != null && _currFN.length() > 0)
 			{
@@ -336,7 +336,7 @@ public class fRefBook extends JFrame
 		}
 	};
 	
-	private void _setCurrentProjectFileName()
+	private void _setCurrentRBFileName()
 	{
 		JFileChooser fDlg = new JFileChooser();
 		FileNameExtensionFilter fnf = new FileNameExtensionFilter(_bnd.getString("RefBook.Text.FileChooser"), REFBOOK_FILE_EXTENSION );

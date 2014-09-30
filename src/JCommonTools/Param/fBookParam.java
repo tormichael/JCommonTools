@@ -47,6 +47,13 @@ public class fBookParam extends JDialog
 	private String _prefPath;
 	private String _currFN;
 	
+	private boolean _isOk;
+	
+	public Boolean IsOk()
+	{
+		return _isOk;
+	}
+	
 	public String getCurrentFileName()
 	{
 		return _currFN;
@@ -71,6 +78,7 @@ public class fBookParam extends JDialog
 		_bp = aBP;
 		_bnd = ResourceBundle.getBundle(CC.CT_RESOURCE_TEXT);
 		_currFN = null;
+		_isOk = false;
 
 		//this.setModalExclusionType(ModalExclusionType.);
 		this.setModal(true);
@@ -115,8 +123,9 @@ public class fBookParam extends JDialog
 						Page pg = (Page) e.getNewLeadSelectionPath().getLastPathComponent();
 						//setStatusText(rbn.getId()+ ") "+rbn.getName()+"["+rbn.getAlias()+"]");
 						int idl = _pnlBP.getDividerLocation();
+						_params.Save();
 						_pnlBP.remove(_params);
-						_params = new pnlParamsDefault(pg.getParameters());
+						_params = new pnlParamsDefault(pg);
 						_pnlBP.setRightComponent(_params);
 						_pnlBP.setDividerLocation(idl);
 					}
@@ -223,6 +232,28 @@ public class fBookParam extends JDialog
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			TreePath tp = _tree.getSelectionPath();
+			if (tp != null)
+			{
+				Page pg = (Page) tp.getLastPathComponent();
+				dPage dlg = new dPage(pg, _trm);
+				//if (tp.getParentPath() == null)
+				//	dlg.setNNowner((Page)tp.getLastPathComponent());
+				//else
+					dlg.setNNowner((Page)tp.getParentPath().getLastPathComponent());
+				dlg.setPreferencePath(_prefPath + "/dEdit");
+				dlg.setVisible(true);
+				if (dlg.isResultOk())
+				{
+					Page owner =  dlg.getNNOwner();
+					if (pg.getParent() !=null && !pg.getParent().equals(owner))
+					{
+						_trm.removeNodeFromParent(pg);
+						_trm.insertNodeInto(pg, owner, owner.getPages().size());
+					}
+					_trm.nodeChanged(pg);
+				}
+			}
 		}
 	};
 	public Action actPageRemove = new AbstractAction() 
@@ -251,12 +282,17 @@ public class fBookParam extends JDialog
 			}
 		}
 	};
-	
+
 	public Action actOk = new AbstractAction() 
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			_isOk = true;
+			_params.Save();
+			
+			fBookParam.this.setVisible(false);
+			
 			//if (_currFN != null && _currFN.length() > 0)
 			//	_bp.Save(_currFN);
 			

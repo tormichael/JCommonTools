@@ -109,14 +109,18 @@ public class RefBook
 
 	public static String getPath(rbNode aNode)
 	{
+		return getPath(aNode, "~");
+	}
+	public static String getPath(rbNode aNode, String aDelim)
+	{
 		String ret = CC.STR_EMPTY;
 		
 		if (aNode != null)
 		{
 			
-			ret = getPath((rbNode)aNode.getParent());
+			ret = getPath((rbNode)aNode.getParent(), aDelim);
 			if (ret.length() > 0)
-				ret = ret + "~" + aNode.getId();
+				ret = ret + aDelim + aNode.getId();
 			else
 				ret = aNode.getId()+CC.STR_EMPTY;
 			

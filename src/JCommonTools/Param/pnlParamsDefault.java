@@ -1,10 +1,12 @@
 package JCommonTools.Param;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.prefs.Preferences;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComboBox;
@@ -20,17 +22,15 @@ import JCommonTools.Dialog.JFontChooser;
 public class pnlParamsDefault extends pnlParams 
 {
 	
-	public pnlParamsDefault(ArrayList<Param> aParams)
+	public pnlParamsDefault(Page aPG)
 	{
-		super (aParams);
-		
+		super (aPG);
 		GridBagLayout gbl = new GridBagLayout();
 		this.setLayout(gbl);
-		if (aParams != null)
+		if (aPG != null && aPG.getParameters() != null && mPrefs != null)
 		{
 			int iRow=0;
-			int _distance = 5;
-			for (Param prm : aParams)
+			for (Param prm : aPG.getParameters())
 			{
 				JComponent comp = null;
 				try
@@ -43,6 +43,7 @@ public class pnlParamsDefault extends pnlParams
 							String[] cont = prm.getSwingCtrlRestriction().split("\\|", -1);
 							for (int ii=0; ii < cont.length; ii++)
 								cbo.addItem(cont[ii]);
+							cbo.setSelectedItem(mPrefs.get(prm.getPrefsKey(), CC.STR_EMPTY));
 							comp = cbo;
 						}
 					}
@@ -63,6 +64,7 @@ public class pnlParamsDefault extends pnlParams
 								   }
 							}
 						});
+						pnl.setText(mPrefs.get(prm.getPrefsKey(), CC.STR_EMPTY));
 						comp = pnl;
 					}
 					else if (prm.getSwingCtrlName().matches(".*JFontChooser.*"))
@@ -75,15 +77,32 @@ public class pnlParamsDefault extends pnlParams
 							public void actionPerformed(ActionEvent e) 
 							{
 								   JFontChooser fontChooser = new JFontChooser();
+									if (pnl.getText().length() > 0)
+									{
+										Font fnt = Font.decode(pnl.getText());
+										fontChooser.setSelectedFont(fnt);
+									}
 								   int result = fontChooser.showDialog(pnlParamsDefault.this);
 								   if (result == JFontChooser.OK_OPTION)
 								   {
 								   		Font font = fontChooser.getSelectedFont();
 								   		pnl.setTextFont(font);
-								   		pnl.setText(CC.STR_EMPTY + font); 
+								   		String  strStyle;
+								        if (font.isBold()) {
+								            strStyle = font.isItalic() ? "bolditalic" : "bold";
+								        } else {
+								            strStyle = font.isItalic() ? "italic" : "plain";
+								        }
+								        pnl.setText(font.getFontName()+"-"+strStyle+"-"+font.getSize()); 
 								   }
 							}
 						});
+						pnl.setText(mPrefs.get(prm.getPrefsKey(), CC.STR_EMPTY));
+						if (pnl.getText().length() > 0)
+						{
+							Font fnt = Font.decode(pnl.getText());
+							pnl.setTextFont(fnt);
+						}
 						comp = pnl;
 					}
 					else
@@ -104,10 +123,17 @@ public class pnlParamsDefault extends pnlParams
 					comp = new JTextField();
 				}
 
+				((JComponent) comp).putClientProperty("prefs-key", prm.getPrefsKey());
+				
+				if (comp instanceof JTextField)
+				{
+					((JTextField) comp).setText(mPrefs.get(prm.getPrefsKey(), CC.STR_EMPTY));
+				}
+
 				JLabel lbl = new JLabel(prm.getTitle());
-				gbl.setConstraints(lbl, new GBC(0,iRow).setAnchor(GBC.WEST).setIns(_distance));
+				gbl.setConstraints(lbl, new GBC(0,iRow).setAnchor(GBC.WEST).setIns(mPage.getInset()));
 				this.add(lbl);
-				gbl.setConstraints(comp, new GBC(1,iRow++).setFill(GBC.HORIZONTAL).setIns(_distance).setWeight(1.0, 0.0));
+				gbl.setConstraints(comp, new GBC(1,iRow++).setFill(GBC.HORIZONTAL).setIns(mPage.getInset()).setWeight(1.0, 0.0));
 				this.add(comp);
 			}
 			JLabel lbl = new JLabel();
@@ -116,4 +142,27 @@ public class pnlParamsDefault extends pnlParams
 		}
 	}
 
+	@Override
+	public void Save()
+	{
+		for (Component comp : this.getComponents() )
+		{
+			if (comp instanceof JTextField)
+			{
+				JTextField txf = (JTextField) comp;
+				mPrefs.put(txf.getClientProperty("prefs-key").toString(), txf.getText());
+			}
+			else if (comp instanceof pnlParamDlg)
+			{
+				pnlParamDlg pnl = (pnlParamDlg) comp;
+				mPrefs.put(pnl.getClientProperty("prefs-key").toString(), pnl.getText());
+			}
+			else if (comp instanceof JComboBox<?>)
+			{
+				JComboBox<String> cbo = (JComboBox<String>) comp;
+				mPrefs.put(cbo.getClientProperty("prefs-key").toString(), cbo.getSelectedItem().toString());
+			}
+		}
+	}
+	
 }
