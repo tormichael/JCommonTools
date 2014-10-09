@@ -95,7 +95,9 @@ public class dParams extends JDialog
 		cboType.addItem("Integer");
 		cboType.addItem("Date");
 		cboType.addItem("Boolean");
-		_tab.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(cboType));
+		DefaultCellEditor cedit = new DefaultCellEditor(cboType);
+		cedit.setClickCountToStart(2);
+		_tab.getColumnModel().getColumn(3).setCellEditor(cedit);
 		
 		JComboBox<String> cboSwCtrlName = new JComboBox<String>();
 		cboSwCtrlName.addItem("javax.swing.JTextField");
@@ -111,7 +113,9 @@ public class dParams extends JDialog
 		cboSwCtrlName.addItem("javax.swing.JFileChooser");
 		cboSwCtrlName.addItem("javax.swing.JColorChooser");
 		cboSwCtrlName.addItem("JFontChooser");
-		_tab.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(cboSwCtrlName));
+		cedit = new DefaultCellEditor(cboSwCtrlName);
+		cedit.setClickCountToStart(2);
+		_tab.getColumnModel().getColumn(4).setCellEditor(cedit);
 	
 		this.addWindowListener(new WindowAdapter() 
 		{

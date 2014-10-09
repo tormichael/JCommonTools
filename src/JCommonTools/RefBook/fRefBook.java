@@ -389,10 +389,21 @@ public class fRefBook extends JFrame
 	{
 		int ret = 0;
 
+		rbNode rbn =  FindRBNodeByNameInComboBoxModel(aModCbo, aName);
+		if (rbn != null)
+			ret = rbn.getId();
+		
+		return ret;
+	}
+
+	public static rbNode FindRBNodeByNameInComboBoxModel(DefaultComboBoxModel<rbNode> aModCbo, String aName)
+	{
+		rbNode ret = null;
+
 		if (aModCbo != null)
 			for (int ii = 0; ii < aModCbo.getSize(); ii++)
 				if (aName.equals(aModCbo.getElementAt(ii).getName()))
-					ret = aModCbo.getElementAt(ii).getId();
+					ret = aModCbo.getElementAt(ii);
 		
 		return ret;
 	}

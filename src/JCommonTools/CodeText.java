@@ -43,8 +43,16 @@ public class CodeText
 		return text;
 	}
 	@Override
-	public boolean equals(Object arg0) {
-		CodeText ct = (CodeText) arg0;
-		return (code==ct.code && text.equals(ct.text));
+	public boolean equals(Object arg0) 
+	{
+		boolean ret = false;
+		
+		if (arg0 instanceof CodeText)
+		{
+			CodeText ct = (CodeText) arg0;
+			ret =  (code==ct.code && text.equals(ct.text));
+		}
+		
+		return ret;
 	}
 }
