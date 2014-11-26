@@ -408,5 +408,17 @@ public class fRefBook extends JFrame
 		return ret;
 	}
 
+	public static rbNode FindRBNodeByIDInComboBoxModel(DefaultComboBoxModel<rbNode> aModCbo, int aID)
+	{
+		rbNode ret = null;
+
+		if (aModCbo != null)
+			for (int ii = 0; ii < aModCbo.getSize(); ii++)
+				if (aID == aModCbo.getElementAt(ii).getId())
+					ret = aModCbo.getElementAt(ii);
+		
+		return ret;
+	}
+
 
 }
