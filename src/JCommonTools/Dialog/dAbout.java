@@ -42,7 +42,7 @@ public class dAbout extends JDialog
 	public void setBackrounImage(Image _img) 
 	{
 		_pnl.set_img(_img);
-		this.repaint();
+		_pnl.repaint();
 	}
 	public void setTextColor(Color c)
 	{
@@ -72,6 +72,7 @@ public class dAbout extends JDialog
 
 		this.setTitle(_bnd.getString("dAbout.Text"));
 		this.setModal(true);
+		this.setLayout(new BorderLayout());
 		Dimension szScreen = Toolkit.getDefaultToolkit().getScreenSize();
 		setSize(szScreen.width/3, szScreen.height/3);
 		setLocation((int)(szScreen.width/2 - this.getWidth()/2), (int)(szScreen.height/2-this.getHeight()/2));
@@ -133,7 +134,9 @@ public class dAbout extends JDialog
 				dAbout.this.getContentPane().repaint();
 				super.windowActivated(e);
 			}
+			
 		});
+		
 		
 	}
 	
