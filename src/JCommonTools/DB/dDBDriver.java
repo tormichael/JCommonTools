@@ -58,15 +58,13 @@ public class dDBDriver extends JDialog
 				@Override
 				public void windowClosing(WindowEvent e) 
 				{
-					dDBDriver.this._reg.SaveWindowSize(dDBDriver.this);
-					dDBDriver.this._reg.SaveWindowLocation(dDBDriver.this);
+					_savePreferences();
 					super.windowClosing(e);
 				}
 			});
-			
 		}
 	}
-	
+
 	public dDBDriver(DBDriver aDrv)
 	{
 		_drv = aDrv;
@@ -160,6 +158,7 @@ public class dDBDriver extends JDialog
 			_drv.PrefixConnectionURL = _txtPrefix.getText();
 			_drv.SuffixConnectionURL = _txtSuffix.getText();
 			_isResultOk = true;
+			_savePreferences();
 			 dDBDriver.this.setVisible(false);
 		}
 	};
@@ -173,4 +172,9 @@ public class dDBDriver extends JDialog
 		}
 	};
 	
+	private void _savePreferences()
+	{
+		dDBDriver.this._reg.SaveWindowSize(dDBDriver.this);
+		dDBDriver.this._reg.SaveWindowLocation(dDBDriver.this);
+	}
 }
