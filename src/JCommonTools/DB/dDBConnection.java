@@ -5,11 +5,18 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 import javax.swing.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import JCommonTools.AsRegister;
 import JCommonTools.CC;
@@ -17,6 +24,8 @@ import JCommonTools.GBC;
 
 public class dDBConnection extends JDialog 
 {
+	public final static String FN_JDBC_DRIVER_LIST = "jdbc-driver-list.xml";
+	
 	private DBWork _wdb;
 	private DBConnectionParam _srcDBParam;
 	
@@ -24,6 +33,7 @@ public class dDBConnection extends JDialog
 	private JComboBox<DBDriver> _cboDriver;
 	private JButton _btnNewDriver;
 	private JButton _btnEditDriver;
+	private JButton _btnSaveDriverList;
 	private JTextField _txtHost;
 	private JTextField _txtPort;
 	private JTextField _txtDBName;
@@ -101,6 +111,10 @@ public class dDBConnection extends JDialog
 				_btnEditDriver.setText(_bnd.getString("dDBConnection.Button.DriverEdit"));
 				gblDriver.setConstraints(_btnEditDriver, new GBC(3,0).setIns(2).setAnchor(GBC.CENTER));
 				pnlDriver.add(_btnEditDriver);
+				_btnSaveDriverList = new JButton(actSaveDriverList);
+				_btnSaveDriverList.setText(_bnd.getString("dDBConnection.Button.SaveDriverList"));
+				gblDriver.setConstraints(_btnSaveDriverList, new GBC(4,0).setIns(2).setAnchor(GBC.CENTER));
+				pnlDriver.add(_btnSaveDriverList);
 				
 			pnlDB.add(pnlDriver);
 		
@@ -169,10 +183,20 @@ public class dDBConnection extends JDialog
 		_btnCancel.setText(_bnd.getString("Button.Cancel"));
 		pnlButton.add(_btnCancel);
 		this.add(pnlButton, BorderLayout.SOUTH);
+
+		_loadDriverList();
 		
 		if (_wdb != null)
 		{
-			_cboDriver.addItem(_wdb.getDBConnParam().Driver);
+			for(int ii=0; ii < _cboDriver.getItemCount(); ii++)
+			{
+				DBDriver dbd = _cboDriver.getItemAt(ii);
+				if (dbd.equals(_wdb.getDBConnParam().Driver))
+					_cboDriver.setSelectedIndex(ii);
+			}
+			
+			if (_cboDriver.getSelectedIndex() == -1)
+				_cboDriver.addItem(_wdb.getDBConnParam().Driver);
 
 			_txtHost.setText(_wdb.getDBConnParam().Host);
 			_txtPort.setText( _wdb.getDBConnParam().Port+CC.STR_EMPTY );
@@ -288,6 +312,31 @@ public class dDBConnection extends JDialog
 		}
 	};
 
+	Action actSaveDriverList = new AbstractAction() 
+	{
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+	    	try
+	    	{
+	    		DBDriverList dbd = new DBDriverList();
+	    		for(int ii=0; ii < _cboDriver.getItemCount(); ii++)
+	    		{
+	    			dbd.arrayDBD.add(_cboDriver.getItemAt(ii));
+	    		}
+	    		
+	    		JAXBContext context = JAXBContext.newInstance(DBDriverList.class);
+	    		Marshaller m = context.createMarshaller();
+	    		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+	    		m.marshal(dbd, new File(FN_JDBC_DRIVER_LIST));
+	    	}
+	    	catch (JAXBException ex)
+	    	{
+				_txtInformation.setText(_txtInformation.getText() + CC.NEW_LINE + ex.getMessage());
+	    	}
+		}
+	};    
+
 	private boolean _setValue2DBWork()
 	{
 		int si = _cboDriver.getSelectedIndex(); 
@@ -300,6 +349,8 @@ public class dDBConnection extends JDialog
 			pdb.Host = _txtHost.getText();
 			if (_txtPort.getText().length()>0)
 				pdb.Port = Integer.parseInt(_txtPort.getText());
+			else
+				pdb.Port = 0;
 			pdb.DBName = _txtDBName.getText();
 
 			pdb.UserName = _txtUserName.getText();
@@ -315,5 +366,28 @@ public class dDBConnection extends JDialog
 			_txtInformation.setText(_bnd.getString("dDBConnection.Error.UndefinedDriver"));
 		
 		return ret;
+	}
+	
+	private void _loadDriverList()
+	{
+		DBDriverList dbda = null;
+    	try
+    	{
+    		JAXBContext context = JAXBContext.newInstance(DBDriverList.class);
+    		Unmarshaller um = context.createUnmarshaller();
+    		Object obj = um.unmarshal(new File(FN_JDBC_DRIVER_LIST));
+    		dbda = (DBDriverList) obj;
+
+    		for (DBDriver dd : dbda.arrayDBD)
+    		{
+    			_cboDriver.addItem(dd);
+    		}
+    		
+    	}
+    	catch (JAXBException ex)
+    	{
+    		//ex.printStackTrace();
+    	}
+		
 	}
 }
