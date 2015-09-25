@@ -1,7 +1,9 @@
 package JCommonTools.RefBook;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -13,6 +15,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -93,6 +96,11 @@ public class fRefBook extends JFrame
 		_rb = aRB;
 		_prefPath = null;
 
+		
+		Dimension szScreen = Toolkit.getDefaultToolkit().getScreenSize();
+		setSize(szScreen.width/3, szScreen.height/3);
+		setLocation((int)(szScreen.width/2 - this.getWidth()/2), (int)(szScreen.height/2-this.getHeight()/2));
+		
 		/**
 		 *   T O O L S   B A R
 		 */
@@ -106,7 +114,6 @@ public class fRefBook extends JFrame
 		_bar.add(ActDelete);
 		_bar.addSeparator();
 		_bar.add(ActRefresh);
-
 		
 		_tree = new JTree();
 		setRefBook(aRB);
@@ -360,7 +367,20 @@ public class fRefBook extends JFrame
 		}
 	}
 	
-	public static void LoadComboModel(DefaultComboBoxModel<rbNode> aModCbo, rbNode aRBNode, boolean aIsEmptyItem)
+	public void SetButtonDefaultText()
+	{
+		ActLoad.putValue(Action.NAME, _bnd.getString("Menu.File.Load"));
+		ActSave.putValue(Action.NAME, _bnd.getString("Menu.File.Save"));
+		
+		ActNew.putValue(Action.NAME, _bnd.getString("RefBook.Menu.Item.New"));
+		ActEdit.putValue(Action.NAME, _bnd.getString("RefBook.Menu.Item.Edit"));
+		ActDelete.putValue(Action.NAME, _bnd.getString("RefBook.Menu.Item.Delete"));
+		
+		ActRefresh.putValue(Action.NAME, _bnd.getString("RefBook.Menu.Refresh"));
+		
+	}
+	
+ 	public static void LoadComboModel(DefaultComboBoxModel<rbNode> aModCbo, rbNode aRBNode, boolean aIsEmptyItem)
 	{
 		aModCbo.removeAllElements();
 		if (aIsEmptyItem)
