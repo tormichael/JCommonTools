@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RefBook>
+    <refBookNode>
+        <Nodes>
+            <Node>
+                <Nodes/>
+                <alias>tn2</alias>
+                <id>20</id>
+                <name>Test node 02</name>
+            </Node>
+            <Node>
+                <Nodes>
+                    <Node>
+                        <Nodes/>
+                        <alias>n-1a</alias>
+                        <id>12</id>
+                        <name>node 01a</name>
+                    </Node>
+                </Nodes>
+                <alias>tn1</alias>
+                <id>10</id>
+                <name>Test node 01</name>
+            </Node>
+            <Node>
+                <Nodes/>
+                <alias>tn3</alias>
+                <id>30</id>
+                <name>Test node 03</name>
+            </Node>
+        </Nodes>
+        <alias>rb</alias>
+        <id>1</id>
+        <name>RefBook</name>
+    </refBookNode>
+</RefBook>
