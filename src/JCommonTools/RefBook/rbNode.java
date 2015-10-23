@@ -231,7 +231,6 @@ public class rbNode  implements MutableTreeNode
 	{
 		return rbNode.findByAlias(this, aSearchText);
 	}
-
 	public static rbNode findByAlias(rbNode aRBN, String aSearchText)
 	{
 		rbNode ret = null;
@@ -243,6 +242,95 @@ public class rbNode  implements MutableTreeNode
 			if (rbn.getNodes().size() > 0)
 			{
 				ret = findByAlias(rbn, aSearchText);
+				if (ret != null)
+					break;
+			}
+		}
+		return ret;	
+	}
+
+	/**
+	 * Recursive found by name item to the nodes collection.
+	 * Character case not ignored!
+	 * @param aSearchText - searched text
+	 * @return founded item of nodes
+	 */
+	public rbNode findByName(String aSearchText)
+	{
+		return rbNode.findByName(this, aSearchText, false);
+	}
+	/**
+	 * Recursive found by name item to the nodes collection.
+	 * @param aSearchText - searched text
+	 * @param aIgnoreCase - if true character case ignored, otherwise not ignored
+	 * @return founded item of nodes
+	 */
+	public rbNode findByName(String aSearchText, boolean aIgnoreCase)
+	{
+		return rbNode.findByName(this, aSearchText, aIgnoreCase);
+	}
+	/**
+	 * Recursive found by name item to the nodes collection.
+	 * @param aRBN -  node (root)
+	 * @param aSearchText - searched text
+	 * @param aIgnoreCase - if true character case ignored, otherwise not ignored
+	 * @return founded item of nodes
+	 */
+	public static rbNode findByName(rbNode aRBN, String aSearchText, boolean aIgnoreCase)
+	{
+		rbNode ret = null;
+		if (aIgnoreCase)
+			aSearchText = aSearchText.toLowerCase();
+		
+		for (rbNode rbn : aRBN.getNodes())
+		{
+			
+			if (aIgnoreCase)
+			{
+				if (rbn.getName( ).toLowerCase().equals(aSearchText))
+					return rbn;
+			}
+			else if (rbn.getName( ).equals(aSearchText))
+			{
+					return rbn;
+			}
+			
+			if (rbn.getNodes().size() > 0)
+			{
+				ret = findByName(rbn, aSearchText, aIgnoreCase);
+				if (ret != null)
+					break;
+			}
+		}
+		return ret;	
+	}
+
+	/**
+	 * Recursive found by code item to the nodes collection.
+	 * @param aID - searching code (ID)
+	 * @return founded item of nodes
+	 */
+	public rbNode findByCode(int aID)
+	{
+		return rbNode.findByCode(this, aID);
+	}
+	/**
+	 * Recursive found by code item to the nodes collection.
+	 * @param aRBN -  node (root)
+	 * @param aID - searching code (ID)
+	 * @return founded item of nodes
+	 */
+	public static rbNode findByCode(rbNode aRBN, int aID)
+	{
+		rbNode ret = null;
+		for (rbNode rbn : aRBN.getNodes())
+		{
+			if (rbn.getId() ==  aID)
+				return rbn;
+
+			if (rbn.getNodes().size() > 0)
+			{
+				ret = findByCode(rbn, aID);
 				if (ret != null)
 					break;
 			}
