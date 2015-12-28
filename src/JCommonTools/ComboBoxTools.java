@@ -10,7 +10,7 @@ import javax.swing.DefaultComboBoxModel;
 
 
 /**
- *	Набор вспомогательных функций для работы с ComboBox. 
+ *	РќР°Р±РѕСЂ РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹С… С„СѓРЅРєС†РёР№ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ ComboBox. 
  * @author M.Tor
  * 07.10.2009
  */
@@ -21,11 +21,11 @@ public class ComboBoxTools
 	}
 
 	/**
-	 * Заполнение DefaultComboBoxModel объектами типа PlaceCodeText из запроса следующего формата: 
+	 * Р—Р°РїРѕР»РЅРµРЅРёРµ DefaultComboBoxModel РѕР±СЉРµРєС‚Р°РјРё С‚РёРїР° PlaceCodeText РёР· Р·Р°РїСЂРѕСЃР° СЃР»РµРґСѓСЋС‰РµРіРѕ С„РѕСЂРјР°С‚Р°: 
 	 * SELECT [code field], [text field] FROM .... 
 	 * @param aCbo - DefaultComboBoxModel
-	 * @param aStm - команда PreparedStatement
-	 * @param aIsClearBeforeFill - флаг указывающий очищать ли коллекцию перед заполнением: true - да; false - нет
+	 * @param aStm - РєРѕРјР°РЅРґР° PreparedStatement
+	 * @param aIsClearBeforeFill - С„Р»Р°Рі СѓРєР°Р·С‹РІР°СЋС‰РёР№ РѕС‡РёС‰Р°С‚СЊ Р»Рё РєРѕР»Р»РµРєС†РёСЋ РїРµСЂРµРґ Р·Р°РїРѕР»РЅРµРЅРёРµРј: true - РґР°; false - РЅРµС‚
 	 */
 	public static void FillPCTextFromPStatement(DefaultComboBoxModel aCbo, PreparedStatement aStm,  boolean aIsClearBeforeFill)
 	 throws SQLException
