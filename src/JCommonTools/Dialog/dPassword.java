@@ -30,6 +30,8 @@ public class dPassword extends JDialog
 	
 	private ResourceBundle _bnd;
 	
+	private GridBagLayout _gbl;
+	private JPanel _pnl;
 	private JLabel _lblText;
 	private JLabel _lblPassword;
 	private JLabel _lblPasswordRepeat;
@@ -46,6 +48,13 @@ public class dPassword extends JDialog
 		if (_txtPasswordRepeat instanceof JTextField)
 			savePasswordRepeat = _txtPasswordRepeat.getText();
 
+		if (_txtPassword != null)
+			_pnl.remove(_txtPassword);
+		if (_isPutNewPassword && _txtPasswordRepeat != null)
+		{
+			_pnl.remove(_txtPasswordRepeat);
+		}
+		
 		if (aIsShowPassword)
 		{
 			//(( JPasswordField)_txtPassword).
@@ -59,11 +68,25 @@ public class dPassword extends JDialog
 			if (_isPutNewPassword)
 				_txtPasswordRepeat = new JPasswordField(16);
 		}
-
+		_txtPassword.setMinimumSize(new Dimension(_txtPassword.getPreferredSize().width, _txtPassword.getPreferredSize().height));
+		if (_isPutNewPassword)
+			_txtPasswordRepeat.setMinimumSize(new Dimension(_txtPasswordRepeat.getPreferredSize().width, _txtPasswordRepeat.getPreferredSize().height));
+		
+		_gbl.setConstraints(_txtPassword, new GBC(2,1).setIns(15));
+		_pnl.add(_txtPassword);
+		if (_isPutNewPassword)
+		{
+			_gbl.setConstraints(_txtPasswordRepeat, new GBC(2,2).setIns(15));
+			_pnl.add(_txtPasswordRepeat);			
+		}
+	
 		if (savePassword != null)
 			_txtPassword.setText(savePassword);
 		if (savePasswordRepeat != null)
 			_txtPasswordRepeat.setText(savePasswordRepeat);
+		
+		validate();
+		repaint();
 	}
 	
 	public String getPassword()
@@ -86,38 +109,35 @@ public class dPassword extends JDialog
 		//this.setLocationByPlatform(true);
 		if (aTitle != null && aTitle.length() > 0)
 			this.setTitle(aTitle);
+		this.setResizable(false);
 		
-		GridBagLayout gbl = new GridBagLayout();
-		JPanel _pnl = new JPanel(gbl);
+		_gbl = new GridBagLayout();
+		_pnl = new JPanel(_gbl);
 			// row - 0
 			_lblText = new JLabel();
-			gbl.setConstraints(_lblText, new GBC(0,0).setIns(15).setGridSpan(3, 1).setFill(GBC.HORIZONTAL));
+			_gbl.setConstraints(_lblText, new GBC(0,0).setIns(15).setGridSpan(3, 1).setFill(GBC.HORIZONTAL));
 			_pnl.add(_lblText);
 			// row - 3
 			_chkPasswordShow = new JCheckBox();
-			gbl.setConstraints(_chkPasswordShow, new GBC(0,3).setIns(15).setGridSpan(3, 1).setFill(GBC.HORIZONTAL));
+			_gbl.setConstraints(_chkPasswordShow, new GBC(0,3).setIns(15).setGridSpan(3, 1).setFill(GBC.HORIZONTAL));
 			_pnl.add(_chkPasswordShow);
 			_isShowPasswod(false);
 			// row - 1
 			JLabel lbl = new JLabel();
-			gbl.setConstraints(lbl, new GBC(0,1).setIns(15));
+			_gbl.setConstraints(lbl, new GBC(0,1).setIns(15));
 			_pnl.add(lbl);
 			_lblPassword = new JLabel();
-			gbl.setConstraints(_lblPassword, new GBC(1,1).setIns(15));
+			_gbl.setConstraints(_lblPassword, new GBC(1,1).setIns(15));
 			_pnl.add(_lblPassword);
-			gbl.setConstraints(_txtPassword, new GBC(2,1).setIns(15));
-			_pnl.add(_txtPassword);
 			if (_txtPasswordRepeat != null)
 			{
 				// row - 2
 				lbl = new JLabel();
-				gbl.setConstraints(lbl, new GBC(0,2).setIns(15));
+				_gbl.setConstraints(lbl, new GBC(0,2).setIns(15));
 				_pnl.add(lbl);
 				_lblPasswordRepeat = new JLabel();
-				gbl.setConstraints(_lblPasswordRepeat, new GBC(1,2).setIns(15));
+				_gbl.setConstraints(_lblPasswordRepeat, new GBC(1,2).setIns(15));
 				_pnl.add(_lblPasswordRepeat);
-				gbl.setConstraints(_txtPasswordRepeat, new GBC(2,2).setIns(15));
-				_pnl.add(_txtPasswordRepeat);
 			}
 		this.add(_pnl, BorderLayout.CENTER);
 			
