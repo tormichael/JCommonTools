@@ -156,6 +156,8 @@ public class dPassword extends JDialog
 			_lblPasswordRepeat.setText(_bnd.getString("dPassword.Label.PasswordRepeat"));
 		_chkPasswordShow.setText(_bnd.getString("dPassword.CheckBox.ShowPassword"));
 		
+		this.getRootPane().setDefaultButton(_btnOk);
+		
 		_chkPasswordShow.addActionListener(new ActionListener()
 		{
 			@Override
