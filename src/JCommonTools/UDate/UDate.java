@@ -129,7 +129,7 @@ public class UDate
 		if (aCal != null)
 		{
 			_year = aCal.get(Calendar.YEAR);
-			_month = aCal.get(Calendar.MONTH);
+			_month = aCal.get(Calendar.MONTH)+1;
 			_day = aCal.get(Calendar.DAY_OF_MONTH);
 			_state = STATE_OK;
 		}
