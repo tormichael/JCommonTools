@@ -72,7 +72,7 @@ public class dPassword extends JDialog
 		if (_isPutNewPassword)
 			_txtPasswordRepeat.setMinimumSize(new Dimension(_txtPasswordRepeat.getPreferredSize().width, _txtPasswordRepeat.getPreferredSize().height));
 		
-		_gbl.setConstraints(_txtPassword, new GBC(2,1).setIns(15));
+		_gbl.setConstraints(_txtPassword, new GBC(2,1).setIns(15).setWeight(0.7, 0));
 		_pnl.add(_txtPassword);
 		if (_isPutNewPassword)
 		{
