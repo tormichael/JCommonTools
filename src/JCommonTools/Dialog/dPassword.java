@@ -6,6 +6,9 @@ import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
@@ -16,6 +19,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import JCommonTools.CC;
@@ -27,12 +31,13 @@ public class dPassword extends JDialog
 {
 	private boolean _isPutNewPassword;
 	private String _password; 
+	private String _fName;
 	
 	private ResourceBundle _bnd;
 	
 	private GridBagLayout _gbl;
 	private JPanel _pnl;
-	private JLabel _lblText;
+	private JTextArea _txtText;
 	private JLabel _lblPassword;
 	private JLabel _lblPasswordRepeat;
 	private JTextField _txtPassword;
@@ -94,10 +99,18 @@ public class dPassword extends JDialog
 		return _password;
 	}
 	
+	public void setFileName(String aFN)
+	{
+		_fName = aFN;
+		if (_fName != null && _fName.length() > 0)
+			_txtText.setText(_fName +System.lineSeparator() +System.lineSeparator()+ _bnd.getString("dPassword.Label.Text" ));
+	}
+	
 	public dPassword(String aTitle, Boolean aIsPutNewPassword)
 	{
 		_isPutNewPassword = aIsPutNewPassword;
 		_password = null;
+		_fName = null;
 		
 		_bnd = ResourceBundle.getBundle(CC.CT_RESOURCE_TEXT);
 
@@ -114,9 +127,10 @@ public class dPassword extends JDialog
 		_gbl = new GridBagLayout();
 		_pnl = new JPanel(_gbl);
 			// row - 0
-			_lblText = new JLabel();
-			_gbl.setConstraints(_lblText, new GBC(0,0).setIns(15).setGridSpan(3, 1).setFill(GBC.HORIZONTAL));
-			_pnl.add(_lblText);
+			_txtText = new JTextArea();
+			_txtText.setEditable(false);
+			_gbl.setConstraints(_txtText, new GBC(0,0).setIns(15).setGridSpan(3, 1).setFill(GBC.HORIZONTAL));
+			_pnl.add(_txtText);
 			// row - 3
 			_chkPasswordShow = new JCheckBox();
 			_gbl.setConstraints(_chkPasswordShow, new GBC(0,3).setIns(15).setGridSpan(3, 1).setFill(GBC.HORIZONTAL));
@@ -150,7 +164,8 @@ public class dPassword extends JDialog
 		pnlButton.add(_btnCancel);
 		this.add(pnlButton, BorderLayout.SOUTH);
 		
-		_lblText.setText(_bnd.getString("dPassword.Label.Text"));
+		_txtText.setText(_bnd.getString("dPassword.Label.Text"));
+		
 		_lblPassword.setText(_bnd.getString("dPassword.Label.Password"));
 		if (_lblPasswordRepeat != null)
 			_lblPasswordRepeat.setText(_bnd.getString("dPassword.Label.PasswordRepeat"));
@@ -166,6 +181,15 @@ public class dPassword extends JDialog
 				_isShowPasswod(_chkPasswordShow.isSelected());
 			}
 		});
+		
+		this.addWindowListener( new WindowAdapter() 
+		{
+		    public void windowOpened( WindowEvent e )
+		    {
+				_txtPassword.requestFocusInWindow();
+		    }
+		});
+		
 		//_chkPasswordShow.setSelected(false);
 	}
 
@@ -176,7 +200,7 @@ public class dPassword extends JDialog
 		{
 			if (_isPutNewPassword &&  !_txtPassword.getText().equals(_txtPasswordRepeat.getText()))
 			{
-				_lblText.setText(_bnd.getString("dPassword.Message.TwoPasswordNotEqual"));
+				_txtText.setText(_bnd.getString("dPassword.Message.TwoPasswordNotEqual"));
 			}
 			else
 			{
