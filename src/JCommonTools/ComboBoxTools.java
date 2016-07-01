@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 
 
 /**
@@ -33,10 +34,28 @@ public class ComboBoxTools
 		if (aIsClearBeforeFill)
 			aCbo.removeAllElements();
 		ResultSet rs = aStm.executeQuery();
+
 		while (rs.next())
+		{
 			aCbo.addElement(new CodeText(rs.getInt(1),rs.getString(2)));
+		}
+		
 		rs.close();
 		
+	}
+	
+	public static void SetSelected2Code(JComboBox<CodeText> aCbo, int aCode)
+	{
+		CodeText ct = null;
+		for (int ii=0; ii < aCbo.getItemCount(); ii++ )
+		{
+			ct = aCbo.getItemAt(ii);
+			if (ct.code == aCode)
+			{
+				aCbo.setSelectedIndex(ii);
+				break;
+			}
+		}
 	}
 
 }
